@@ -1,16 +1,14 @@
+import { ContactForm } from "@/components/ContactForm";
 import { SafeHTML } from "@/components/SafeHtml";
-import { client, getAnnounceDetail } from "@/lib/client";
+import { client, getLiveDetail } from "@/lib/client";
 import { getBandData } from "@/lib/client";
+import { Live } from "@/types/type";
 
-export const revalidate = 600; // ISR: 10分ごとに再生成
-
-interface Props {
-  params: Promise<{ id: string }>;
-}
+export const revalidate = 600;
 
 export async function generateStaticParams() {
   const contents = await client.getAllContentIds({
-    endpoint: "announcements",
+    endpoint: "lives",
   });
   return contents.map((id) => ({
     id,
@@ -20,15 +18,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const bandData = await getBandData();
   const { id } = await params;
-  const detail = await getAnnounceDetail(id);
+  const detail = await getLiveDetail(id);
+
   const name = bandData.title;
   const description = bandData.description;
-  const siteUrl =
-    (process.env.NEXT_PUBLIC_SITE_URL || "https://example.com") + `/news/${id}`;
-  const title = `${detail.title} | ${name}`;
-  const sns = bandData.sns;
-
-  const image = detail.eyecatch?.url
+  const eventImage = detail.eyecatch?.url
     ? [detail.eyecatch.url]
     : bandData.heroImages.map((image, i) => ({
         url: image.url,
@@ -36,6 +30,11 @@ export async function generateMetadata({ params }: Props) {
         height: image.height,
         alt: `${name} ${i + 1}`,
       }));
+
+  const siteUrl =
+    (process.env.NEXT_PUBLIC_SITE_URL || "https://example.com") + `/live/${id}`;
+  const title = `${detail.title} | ${name}`;
+  const sns = bandData.sns;
 
   return {
     title,
@@ -53,14 +52,14 @@ export async function generateMetadata({ params }: Props) {
       description,
       url: siteUrl,
       siteName: `${name}`,
-      images: [...image],
+      images: [...eventImage],
       type: "website",
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [...image],
+      images: [...eventImage],
       creator: sns?.xAccount,
     },
     alternates: {
@@ -72,12 +71,25 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default async function NewsDetail({ params }: Props) {
-  const { id } = await params;
-  const detail = await getAnnounceDetail(id);
+interface Props {
+  params: Promise<{ id: string }>;
+}
 
+export default async function ScheduleDetail({ params }: Props) {
+  const { id } = await params;
+  const detail = await getLiveDetail(id);
+  const { contents } = await client.getList<
+    Pick<Live, "id" | "title" | "eyecatch" | "eventDetail">
+  >({
+    endpoint: "lives",
+    queries: {
+      fields: "id,title,eyecatch,eventDetail.eventDate",
+      orders: "-eventDetail.eventDate",
+      limit: 5,
+    },
+  });
   return (
-    <section id="news" className="min-h-full">
+    <section id="live" className="min-h-full">
       <div className="max-w-5xl mx-auto py-24 px-6">
         <h1 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
           {detail.title}
@@ -85,6 +97,11 @@ export default async function NewsDetail({ params }: Props) {
         <div>
           <SafeHTML html={detail.content} />
         </div>
+        {/* TODO フォーム */}
+        <div id="form">
+          <ContactForm defaultScheduleId={id} schedules={contents} />
+        </div>
+        {/* TODO カレンダーを表示して、過去のライブもおえるようにする(別コンポーネント) */}
       </div>
     </section>
   );

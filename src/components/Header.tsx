@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 const navLinks = [
   { path: "/", name: "home" },
   { path: "/#news", name: "news" },
-  { path: "/#schedule", name: "schedule" },
+  { path: "/#live", name: "live" },
   { path: "/#about", name: "about" },
   { path: "/#videos", name: "videos" },
   { path: "/#contact", name: "contact" },
@@ -21,7 +21,6 @@ export function Header({ title }: { title: string }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    console.log("useEffect");
     const observers: IntersectionObserver[] = [];
 
     navLinks.forEach(({ name: id }) => {

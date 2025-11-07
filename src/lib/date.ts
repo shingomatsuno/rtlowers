@@ -1,9 +1,12 @@
-import { Announce } from "@/types/type";
+import { Live } from "@/types/type";
 import { parseISO, isAfter, compareAsc } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { ja } from "date-fns/locale";
 
-// yyyy/MM/dd (EEE)で曜日
+/**
+ * yyyy/MM/dd
+ * yyyy/MM/dd (EEE)で曜日
+ */
 export function dateFormat(
   date: Date | string | number,
   format = "yyyy/MM/dd"
@@ -16,7 +19,9 @@ export function dateFormat(
   }
 }
 
-export function getNextSchedule(schedules: Announce[]): Announce | null {
+export function getNextSchedule(
+  schedules: Pick<Live, "id" | "title" | "eyecatch" | "eventDetail">[]
+): Pick<Live, "id" | "title" | "eyecatch" | "eventDetail"> | null {
   const now = new Date();
   const tz = "Asia/Tokyo";
 

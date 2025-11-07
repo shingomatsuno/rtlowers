@@ -26,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const dynamicSchedulePages = schedules.map((id) => ({
-    url: `${siteUrl}/schedule/${id}`,
+    url: `${siteUrl}/live/${id}`,
   }));
 
   return [...staticPages, ...dynamicNewsPages, ...dynamicSchedulePages];

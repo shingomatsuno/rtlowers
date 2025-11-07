@@ -2,17 +2,22 @@ import { dateFormat } from "@/lib/date";
 import { Announce } from "@/types/type";
 import Link from "next/link";
 
-export function AnnouncementList({ list }: { list: Announce[] }) {
+export function AnnouncementList({
+  list,
+}: {
+  list: Pick<Announce, "id" | "publishedAt" | "title">[];
+}) {
   return (
     <ul className="divide-y divide-gray-200">
-      {/* ニュース内容 */}
       {list.map(({ id, publishedAt, title }) => (
         <Link key={id} href={`/news/${id}`} className="">
           <li className="flex border-b border-gray-100 justify-between items-center py-4 transition cursor-pointer group hover:opacity-80">
             <div className="flex flex-col">
-              <span className="text-sm text-gray-100">
-                {dateFormat(publishedAt)}
-              </span>
+              {publishedAt && (
+                <span className="text-sm text-gray-100">
+                  {dateFormat(publishedAt)}
+                </span>
+              )}
               <span className="font-medium text-gray-100">{title}</span>
             </div>
             <svg

@@ -1,20 +1,25 @@
 import { dateFormat } from "@/lib/date";
-import { Announce } from "@/types/type";
+import { Live } from "@/types/type";
 import Link from "next/link";
 
-export function EventList({ list }: { list: Announce[] }) {
+export function EventList({
+  list,
+}: {
+  list: Pick<Live, "id" | "eyecatch" | "eventDetail" | "title">[];
+}) {
   return (
     <ul className="divide-y divide-gray-200">
-      {/* ニュース内容 */}
       {list.map(({ id, eyecatch, eventDetail, title }) => (
-        <Link key={id} href={`/news/${id}`} className="">
+        <Link key={id} href={`/live/${id}`} className="">
           <li className="flex border-b border-gray-100 justify-between items-center py-4 transition cursor-pointer group hover:opacity-80">
             <div className="flex gap-2 items-center">
-              <img src={eyecatch.url} width={150} height={80} />
+              {eyecatch && <img src={eyecatch.url} width={150} height={80} />}
               <div className="flex flex-col">
-                <span className="text-sm text-gray-100">
-                  {dateFormat(eventDetail.eventDate, "yyyy/MM/dd (EEE)")}
-                </span>
+                {eventDetail.eventDate && (
+                  <span className="text-sm text-gray-100">
+                    {dateFormat(eventDetail.eventDate, "yyyy/MM/dd (EEE)")}
+                  </span>
+                )}
                 <span className="font-medium text-gray-100">{title}</span>
               </div>
             </div>
