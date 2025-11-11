@@ -1,6 +1,7 @@
-import { dateFormat } from "@/lib/date";
+import { dateFormat, isNew } from "@/lib/date";
 import { Announce } from "@/types/type";
 import Link from "next/link";
+import { NewLabel } from "./NewLabel";
 
 export function AnnouncementList({
   list,
@@ -13,11 +14,14 @@ export function AnnouncementList({
         <Link key={id} href={`/news/${id}`} className="">
           <li className="flex border-b border-gray-100 justify-between items-center py-4 transition cursor-pointer group hover:opacity-80">
             <div className="flex flex-col">
-              {publishedAt && (
-                <span className="text-sm text-gray-100">
-                  {dateFormat(publishedAt)}
-                </span>
-              )}
+              <div className="flex items-center gap-2">
+                {publishedAt && (
+                  <span className="text-sm text-gray-100">
+                    {dateFormat(publishedAt)}
+                  </span>
+                )}
+                {publishedAt && isNew(publishedAt) && <NewLabel />}
+              </div>
               <span className="font-medium text-gray-100">{title}</span>
             </div>
             <svg

@@ -1,5 +1,5 @@
 import { Live } from "@/types/type";
-import { parseISO, isAfter, compareAsc } from "date-fns";
+import { parseISO, isAfter, compareAsc, differenceInDays } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import { ja } from "date-fns/locale";
 
@@ -46,4 +46,11 @@ export function getNextSchedule(
     .sort((a, b) => compareAsc(a.dateObj, b.dateObj));
 
   return upcoming[0] || null;
+}
+
+// 30日以内ならNEW
+export function isNew(date: string) {
+  const _date = parseISO(date);
+  const daysDiff = differenceInDays(new Date(), _date);
+  return daysDiff <= 30;
 }

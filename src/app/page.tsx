@@ -1,9 +1,12 @@
 import { AnnouncementList } from "@/components/AnnouncementList";
 import { EventList } from "@/components/EventList";
 import { ContactForm } from "@/components/ContactForm";
-import { client, getBandData } from "@/lib/client";
+import { client, getBandData, getFutureLives } from "@/lib/client";
 import { dateFormat, getNextSchedule } from "@/lib/date";
-import { Announce, Live } from "@/types/type";
+import { Announce, BandData, Live } from "@/types/type";
+import YoutubeEmbed from "@/components/YoutubeEmbed";
+import Link from "next/link";
+import { SafeHTML } from "@/components/SafeHtml";
 
 export const revalidate = 600;
 
@@ -53,29 +56,36 @@ export async function generateMetadata() {
 }
 
 export default async function HomePage() {
-  const [bandData, announceList, schedules] = await Promise.all([
-    getBandData(),
-    client.getList<Pick<Announce, "id" | "title" | "publishedAt">>({
-      endpoint: "announcements",
-      queries: {
-        fields: "id,title,publishedAt",
-        orders: "-publishedAt",
-        limit: 5,
-      },
-    }),
-    client.getList<Pick<Live, "id" | "title" | "eyecatch" | "eventDetail">>({
-      endpoint: "lives",
-      queries: {
-        fields: "id,title,eyecatch,eventDetail.eventDate",
-        orders: "-eventDetail.eventDate",
-        limit: 5,
-      },
-    }),
-  ]);
+  const [bandData, aboutData, announceList, schedules, futureLives] =
+    await Promise.all([
+      getBandData(),
+      client.get<Pick<BandData, "about">>({
+        endpoint: "overview",
+        queries: {
+          fields: "about",
+        },
+      }),
+      client.getList<Pick<Announce, "id" | "title" | "publishedAt">>({
+        endpoint: "announcements",
+        queries: {
+          fields: "id,title,publishedAt",
+          orders: "-publishedAt",
+          limit: 5,
+        },
+      }),
+      client.getList<Pick<Live, "id" | "title" | "eyecatch" | "eventDetail">>({
+        endpoint: "lives",
+        queries: {
+          fields: "id,title,eyecatch,eventDetail.eventDate",
+          orders: "-eventDetail.eventDate",
+          limit: 5,
+        },
+      }),
+      getFutureLives(),
+    ]);
 
-  // TODO chedulesの中から、未来で、一番近い日付のものを取得
+  // chedulesの中から、未来で、一番近い日付のものを取得
   const nextEvent = getNextSchedule(schedules.contents);
-  // TODO 開催前のライブに絞り込む
 
   return (
     <div>
@@ -115,15 +125,30 @@ export default async function HomePage() {
         </div>
       </section>
       {nextEvent && (
-        <section>
-          <div className="max-w-5xl mx-auto py-24 px-6">
-            <div>Next LIVE!!</div>
+        <section className="relative text-center overflow-hidden bg-gradient-to-b from-black via-[#0f0f0f] to-[#1a1a1a]">
+          <div className="max-w-5xl mx-auto py-24 px-6 text-center">
+            <div className="text-4xl font-extrabold mb-4 inline-block animate-interval-rotate text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 drop-shadow-[0_0_10px_rgba(0,255,255,0.6)]">
+              Next LIVE!!
+            </div>
+
+            {/* イベントタイトル */}
             <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
               {nextEvent.title}
             </h2>
-            <div>
+
+            {/* 日付 */}
+            <div className="text-lg text-gray-300">
               {dateFormat(nextEvent.eventDetail.eventDate, "yyyy/MM/dd (EEE)")}
             </div>
+            <div className="text-lg text-gray-300">
+              {nextEvent.eventDetail.venue}
+            </div>
+            <Link
+              href={`/live/${nextEvent.id}`}
+              className="inline-block text-lg mt-6 font-semibold text-cyan-300 border border-cyan-500 rounded-full px-8 py-3 transition-all duration-300 hover:bg-cyan-500 hover:text-black hover:shadow-[0_0_20px_rgba(0,255,255,0.7)]"
+            >
+              詳細を見る →
+            </Link>
           </div>
         </section>
       )}
@@ -132,7 +157,7 @@ export default async function HomePage() {
         className="min-h-screen bg-gradient-to-b from-[#0d0d0d] via-[#1a0f1f] to-[#000000]"
       >
         <div className="max-w-5xl mx-auto py-24 px-6">
-          <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
+          <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-200 via-gray-100 to-white drop-shadow-[0_0_6px_rgba(255,255,255,0.3)] animate-fadeInUp">
             NEWS
           </h2>
           <AnnouncementList list={announceList.contents} />
@@ -143,7 +168,7 @@ export default async function HomePage() {
         className="min-h-screen bg-gradient-to-b from-[#0d0d0d] via-[#1a0f1f] to-[#000000]"
       >
         <div className="max-w-5xl mx-auto py-24 px-6">
-          <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
+          <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-200 via-gray-100 to-white drop-shadow-[0_0_6px_rgba(255,255,255,0.3)] animate-fadeInUp">
             LIVE
           </h2>
           <EventList list={schedules.contents} />
@@ -154,21 +179,48 @@ export default async function HomePage() {
         className="min-h-screen bg-gradient-to-b  from-[#000000] via-[#0f0f1a] to-[#1a0f0f]"
       >
         <div className="max-w-5xl mx-auto py-24 px-6">
-          <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
+          <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-200 via-gray-100 to-white drop-shadow-[0_0_6px_rgba(255,255,255,0.3)] animate-fadeInUp">
             ABOUT
           </h2>
-          {/* バイオグラフィ */}
+          <div className="flex flex-col items-start gap-10">
+            <div className="relative w-full flex justify-center">
+              <div className="relative overflow-hidden rounded-2xl shadow-lg">
+                <img
+                  src={aboutData.about.image.url}
+                  alt="メンバー1"
+                  className="object-cover hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+            </div>
+
+            {/* 右側：経緯や紹介 */}
+            <div className="w-full  space-y-6">
+              <SafeHTML html={aboutData.about.bio} />
+              <ul className="text-gray-300 text-sm">
+                {aboutData.about.members.map((m, i) => (
+                  <li key={i}>
+                    {m.part} {m.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
       <section
-        id="videos"
+        id="music"
         className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a0026] to-[#000000]"
       >
         <div className="max-w-5xl mx-auto py-24 px-6">
-          <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
-            VIDEOS
+          <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-200 via-gray-100 to-white drop-shadow-[0_0_6px_rgba(255,255,255,0.3)] animate-fadeInUp">
+            MUSIC
           </h2>
-          {/* 曲 */}
+          <div className="flex flex-col gap-4 md:px-8">
+            <YoutubeEmbed videoId="ATtFU9XFSXI" />
+            {/* <YoutubeEmbed videoId="ATtFU9XFSXI" />
+            <YoutubeEmbed videoId="ATtFU9XFSXI" />
+            <YoutubeEmbed videoId="ATtFU9XFSXI" /> */}
+          </div>
         </div>
       </section>
       <section
@@ -176,10 +228,10 @@ export default async function HomePage() {
         className="min-h-screen bg-gradient-to-b from-[#000000] via-[#111111] to-[#0d0d0d]"
       >
         <div className="max-w-5xl mx-auto py-24 px-6">
-          <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
+          <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-200 via-gray-100 to-white drop-shadow-[0_0_6px_rgba(255,255,255,0.3)] animate-fadeInUp">
             CONTACT
           </h2>
-          <ContactForm schedules={schedules.contents} />
+          <ContactForm schedules={futureLives.contents} sns={bandData.sns} />
         </div>
       </section>
     </div>

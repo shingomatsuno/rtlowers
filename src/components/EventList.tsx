@@ -13,7 +13,9 @@ export function EventList({
         <Link key={id} href={`/live/${id}`} className="">
           <li className="flex border-b border-gray-100 justify-between items-center py-4 transition cursor-pointer group hover:opacity-80">
             <div className="flex gap-2 items-center">
-              {eyecatch && <img src={eyecatch.url} width={150} height={80} />}
+              {eyecatch && (
+                <img src={eyecatch.url} width={150} height={80} alt={title} />
+              )}
               <div className="flex flex-col">
                 {eventDetail.eventDate && (
                   <span className="text-sm text-gray-100">

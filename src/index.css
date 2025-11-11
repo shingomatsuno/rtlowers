@@ -213,3 +213,21 @@ body {
     cursor: pointer;
   }
 }
+@keyframes interval-rotate {
+  0% {
+    transform: rotatX(0deg);
+  }
+  5% {
+    transform: rotateX(360deg);
+  }
+  100% {
+    transform: rotateX(360deg);
+  }
+}
+
+.animate-interval-rotate {
+  display: inline-block;
+  animation: interval-rotate 6s ease-in-out infinite;
+  transform-origin: center;
+  transform-style: preserve-3d;
+}

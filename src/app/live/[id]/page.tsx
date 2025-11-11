@@ -1,8 +1,7 @@
 import { ContactForm } from "@/components/ContactForm";
 import { SafeHTML } from "@/components/SafeHtml";
-import { client, getLiveDetail } from "@/lib/client";
+import { client, getFutureLives, getLiveDetail } from "@/lib/client";
 import { getBandData } from "@/lib/client";
-import { Live } from "@/types/type";
 
 export const revalidate = 600;
 
@@ -77,17 +76,12 @@ interface Props {
 
 export default async function ScheduleDetail({ params }: Props) {
   const { id } = await params;
-  const detail = await getLiveDetail(id);
-  const { contents } = await client.getList<
-    Pick<Live, "id" | "title" | "eyecatch" | "eventDetail">
-  >({
-    endpoint: "lives",
-    queries: {
-      fields: "id,title,eyecatch,eventDetail.eventDate",
-      orders: "-eventDetail.eventDate",
-      limit: 5,
-    },
-  });
+  const [bandData, detail, { contents }] = await Promise.all([
+    getBandData(),
+    getLiveDetail(id),
+    getFutureLives(),
+  ]);
+
   return (
     <section id="live" className="min-h-full">
       <div className="max-w-5xl mx-auto py-24 px-6">
@@ -97,9 +91,14 @@ export default async function ScheduleDetail({ params }: Props) {
         <div>
           <SafeHTML html={detail.content} />
         </div>
-        {/* TODO フォーム */}
+        {/* TODO 終わってるときは非表示 */}
         <div id="form">
-          <ContactForm defaultScheduleId={id} schedules={contents} />
+          <ContactForm
+            isTicket
+            defaultScheduleId={id}
+            schedules={contents}
+            sns={bandData.sns}
+          />
         </div>
         {/* TODO カレンダーを表示して、過去のライブもおえるようにする(別コンポーネント) */}
       </div>

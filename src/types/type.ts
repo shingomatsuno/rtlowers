@@ -9,7 +9,7 @@ export interface SnsData {
   xAccount?: string;
   youtubeChannel?: string;
   instagramAccount?: string;
-  ticktockAccount?: string;
+  tiktokAccount?: string;
 }
 
 export interface MemberData {
@@ -30,7 +30,8 @@ export interface AboutData {
 
 export interface MovieData {
   fieldId: "movie";
-  url: string;
+  title?: string;
+  videoId: string;
 }
 
 export interface BandData {
