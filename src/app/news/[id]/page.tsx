@@ -1,3 +1,4 @@
+import { LatestNews } from "@/components/LatestNews";
 import { SafeHTML } from "@/components/SafeHtml";
 import { client, getAnnounceDetail } from "@/lib/client";
 import { getBandData } from "@/lib/client";
@@ -79,11 +80,23 @@ export default async function NewsDetail({ params }: Props) {
   return (
     <section id="news" className="min-h-full">
       <div className="max-w-5xl mx-auto py-24 px-6">
-        <h1 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
-          {detail.title}
-        </h1>
-        <div>
-          <SafeHTML html={detail.content} />
+        <div className="md:flex md:gap-6 ">
+          <div className="md:flex-[1.5] mb-10 md:mb-0">
+            <h1 className="md:text-3xl text-2xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
+              {detail.title}
+            </h1>
+            {detail.eyecatch && (
+              <img
+                src={detail.eyecatch.url}
+                className="w-full h-auto rounded-md mb-5"
+                alt={detail.title}
+              />
+            )}
+            <SafeHTML html={detail.content} />
+          </div>
+          <div className="md:flex-1">
+            <LatestNews />
+          </div>
         </div>
       </div>
     </section>

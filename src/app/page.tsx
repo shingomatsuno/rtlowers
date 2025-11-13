@@ -56,13 +56,13 @@ export async function generateMetadata() {
 }
 
 export default async function HomePage() {
-  const [bandData, aboutData, announceList, schedules, futureLives] =
+  const [bandData, aboutMovieData, announceList, schedules, futureLives] =
     await Promise.all([
       getBandData(),
-      client.get<Pick<BandData, "about">>({
+      client.get<Pick<BandData, "about" | "movies">>({
         endpoint: "overview",
         queries: {
-          fields: "about",
+          fields: "about,movies",
         },
       }),
       client.getList<Pick<Announce, "id" | "title" | "publishedAt">>({
@@ -130,13 +130,9 @@ export default async function HomePage() {
             <div className="text-4xl font-extrabold mb-4 inline-block animate-interval-rotate text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 drop-shadow-[0_0_10px_rgba(0,255,255,0.6)]">
               Next LIVE!!
             </div>
-
-            {/* イベントタイトル */}
             <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
               {nextEvent.title}
             </h2>
-
-            {/* 日付 */}
             <div className="text-lg text-gray-300">
               {dateFormat(nextEvent.eventDetail.eventDate, "yyyy/MM/dd (EEE)")}
             </div>
@@ -186,18 +182,16 @@ export default async function HomePage() {
             <div className="relative w-full flex justify-center">
               <div className="relative overflow-hidden rounded-2xl shadow-lg">
                 <img
-                  src={aboutData.about.image.url}
-                  alt="メンバー1"
+                  src={aboutMovieData.about.image.url}
+                  alt="bio image"
                   className="object-cover hover:scale-105 transition-transform duration-500"
                 />
               </div>
             </div>
-
-            {/* 右側：経緯や紹介 */}
             <div className="w-full  space-y-6">
-              <SafeHTML html={aboutData.about.bio} />
+              <SafeHTML html={aboutMovieData.about.bio} />
               <ul className="text-gray-300 text-sm">
-                {aboutData.about.members.map((m, i) => (
+                {aboutMovieData.about.members.map((m, i) => (
                   <li key={i}>
                     {m.part} {m.name}
                   </li>
@@ -216,10 +210,9 @@ export default async function HomePage() {
             MUSIC
           </h2>
           <div className="flex flex-col gap-4 md:px-8">
-            <YoutubeEmbed videoId="ATtFU9XFSXI" />
-            {/* <YoutubeEmbed videoId="ATtFU9XFSXI" />
-            <YoutubeEmbed videoId="ATtFU9XFSXI" />
-            <YoutubeEmbed videoId="ATtFU9XFSXI" /> */}
+            {aboutMovieData.movies.map((m, i) => (
+              <YoutubeEmbed key={i} videoId={m.videoId} />
+            ))}
           </div>
         </div>
       </section>

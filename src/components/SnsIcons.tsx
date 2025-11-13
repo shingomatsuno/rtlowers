@@ -6,7 +6,7 @@ export default function SnsIcons({ sns }: { sns: SnsData }) {
     <div className="flex gap-4 md:gap-6 items-center">
       {sns.xAccount && (
         <a
-          href="https://x.com/"
+          href={`https://x.com/${sns.xAccount}`}
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-white transition-colors"
@@ -16,7 +16,7 @@ export default function SnsIcons({ sns }: { sns: SnsData }) {
       )}
       {sns.youtubeChannel && (
         <a
-          href="https://www.youtube.com/"
+          href={`https://www.youtube.com/${sns.youtubeChannel}`}
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-white transition-colors"
@@ -26,7 +26,7 @@ export default function SnsIcons({ sns }: { sns: SnsData }) {
       )}
       {sns.instagramAccount && (
         <a
-          href="https://www.instagram.com/"
+          href={`https://www.instagram.com/${sns.instagramAccount}`}
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-white transition-colors"
@@ -36,7 +36,7 @@ export default function SnsIcons({ sns }: { sns: SnsData }) {
       )}
       {sns.tiktokAccount && (
         <a
-          href="https://www.tiktok.com/"
+          href={`https://www.tiktok.com/${sns.tiktokAccount}`}
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-white transition-colors"

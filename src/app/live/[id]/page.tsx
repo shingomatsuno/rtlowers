@@ -1,7 +1,9 @@
 import { ContactForm } from "@/components/ContactForm";
+import { LiveArchive } from "@/components/LiveArchive";
 import { SafeHTML } from "@/components/SafeHtml";
 import { client, getFutureLives, getLiveDetail } from "@/lib/client";
 import { getBandData } from "@/lib/client";
+import { dateFormat, isValidUtcDate } from "@/lib/date";
 
 export const revalidate = 600;
 
@@ -82,25 +84,53 @@ export default async function ScheduleDetail({ params }: Props) {
     getFutureLives(),
   ]);
 
+  const validDate = isValidUtcDate(detail.eventDetail.eventDate);
+
   return (
     <section id="live" className="min-h-full">
       <div className="max-w-5xl mx-auto py-24 px-6">
-        <h1 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
-          {detail.title}
-        </h1>
-        <div>
-          <SafeHTML html={detail.content} />
+        <div className="md:flex md:gap-4">
+          <div className="md:flex-[1.5]">
+            <h1 className="md:text-3xl text-2xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
+              {detail.title}
+            </h1>
+            {detail.eyecatch && (
+              <img
+                src={detail.eyecatch.url}
+                className="w-full h-auto rounded-md mb-5"
+                alt={detail.title}
+              />
+            )}
+            <SafeHTML html={detail.content} />
+          </div>
+          <div className="hidden md:flex flex-1 justify-center">
+            <LiveArchive
+              defaultYearMonth={dateFormat(
+                detail.eventDetail.eventDate,
+                "yyyy-MM"
+              )}
+            />
+          </div>
         </div>
-        {/* TODO 終わってるときは非表示 */}
-        <div id="form">
-          <ContactForm
-            isTicket
-            defaultScheduleId={id}
-            schedules={contents}
-            sns={bandData.sns}
+        {/* 終わってるときは非表示 */}
+        {validDate && (
+          <div id="form" className="mt-8">
+            <ContactForm
+              isTicket
+              defaultScheduleId={id}
+              schedules={contents}
+              sns={bandData.sns}
+            />
+          </div>
+        )}
+        <div className="md:hidden block mt-8">
+          <LiveArchive
+            defaultYearMonth={dateFormat(
+              detail.eventDetail.eventDate,
+              "yyyy-MM"
+            )}
           />
         </div>
-        {/* TODO カレンダーを表示して、過去のライブもおえるようにする(別コンポーネント) */}
       </div>
     </section>
   );
