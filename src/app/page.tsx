@@ -104,7 +104,7 @@ export default async function HomePage() {
             <img
               src={bandData.heroImages[0].url}
               alt="Hero"
-              className="hidden h-auto w-full animate-[scale_20s_ease-in-out_infinite_alternate] object-cover opacity-60 md:block"
+              className="mx-auto hidden h-auto w-full max-w-[1280px] animate-[scale_20s_ease-in-out_infinite_alternate] object-cover opacity-60 md:block"
             />
           </>
         )}
@@ -114,14 +114,14 @@ export default async function HomePage() {
             <img
               src={bandData.heroImages[0].url}
               alt="Hero"
-              className="h-auto w-full animate-[scale_20s_ease-in-out_infinite_alternate] object-cover opacity-60"
+              className="mx-auto h-auto w-full max-w-[1280px] animate-[scale_20s_ease-in-out_infinite_alternate] object-cover opacity-60"
             />
           ))}
         <div className="absolute bottom-3 w-full text-center">
-          <h1 className="mx-auto font-[math] text-4xl font-bold italic tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] md:text-8xl">
+          <h1 className="mx-auto font-[math] text-4xl font-bold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] md:text-8xl">
             {bandData.title}
           </h1>
-          <p className="text-lg font-bold">{bandData.description}</p>
+          <p className="text-sm font-bold md:text-lg">{bandData.description}</p>
         </div>
       </section>
       {nextEvent && (
@@ -157,7 +157,17 @@ export default async function HomePage() {
             NEWS
           </h2>
           {announceList.contents.length > 0 && (
-            <AnnouncementList list={announceList.contents} />
+            <>
+              <AnnouncementList list={announceList.contents} />
+              <div className="mt-8 text-center">
+                <Link
+                  href="/news"
+                  className="inline-block rounded-full border border-white/30 px-8 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10 hover:text-cyan-400"
+                >
+                  VIEW MORE
+                </Link>
+              </div>
+            </>
           )}
           {announceList.contents.length == 0 && <p>ニュースはありません</p>}
         </div>
@@ -171,7 +181,17 @@ export default async function HomePage() {
             LIVE
           </h2>
           {schedules.contents.length > 0 && (
-            <EventList list={schedules.contents} />
+            <>
+              <EventList list={schedules.contents} />
+              <div className="mt-8 text-center">
+                <Link
+                  href="/live"
+                  className="inline-block rounded-full border border-white/30 px-8 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10 hover:text-cyan-400"
+                >
+                  VIEW MORE
+                </Link>
+              </div>
+            </>
           )}
           {schedules.contents.length == 0 && <p>ライブはありません</p>}
         </div>

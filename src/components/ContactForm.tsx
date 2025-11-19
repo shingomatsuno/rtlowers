@@ -150,7 +150,7 @@ export function ContactForm({
 
               {/* ラジオボタン */}
               {!isTicket && (
-                <div className="my-4 flex gap-2">
+                <div className="my-4 flex flex-col gap-2 md:flex-row">
                   {Object.entries(ContactType).map(([key, value]) => (
                     <label
                       key={value}
