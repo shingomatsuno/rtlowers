@@ -60,7 +60,7 @@ export function LiveArchive({
   return (
     <div>
       <Calendar
-        className="text-slate-100 bg-gray-900 rounded-md"
+        className="rounded-md bg-gray-900 text-slate-100"
         mode="single"
         month={parseYearMonth(yearMonth)}
         onMonthChange={onMonthChange}
@@ -72,7 +72,7 @@ export function LiveArchive({
             </span>
           ),
           Day: ({ day }) => (
-            <td className="w-10 flex justify-center">
+            <td className="flex w-10 justify-center">
               {(() => {
                 const date = dateFormat(day.date);
                 const live = list?.find(
@@ -84,7 +84,7 @@ export function LiveArchive({
                     <Link
                       title={live.title}
                       href={`/live/${live.id}`}
-                      className="block w-full h-full text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded-lg text-center font-medium shadow-md transition-colors"
+                      className="block h-full w-full rounded-lg bg-blue-600 text-center font-medium text-white shadow-md transition-colors hover:bg-blue-700 active:bg-blue-800"
                     >
                       {day.date.getDate()}
                     </Link>

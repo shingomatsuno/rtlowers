@@ -44,14 +44,14 @@ export function Header({ title }: { title: string }) {
   }, [pathname]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-6 py-4">
+    <nav className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-md">
+      <div className="mx-auto max-w-7xl px-6 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-2xl font-bold">{title}</span>
           </Link>
           {/* Desktop Menu */}
-          <div className="hidden md:flex gap-8">
+          <div className="hidden gap-8 md:flex">
             {navLinks.map(({ path, name }) => (
               <Link
                 key={name}
@@ -68,13 +68,13 @@ export function Header({ title }: { title: string }) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-white hover:text-red-500 transition-colors"
+            className="text-white transition-colors hover:text-red-500 md:hidden"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
-              <X className="w-6 h-6" />
+              <X className="h-6 w-6" />
             ) : (
-              <Menu className="w-6 h-6" />
+              <Menu className="h-6 w-6" />
             )}
           </button>
         </div>
@@ -82,11 +82,11 @@ export function Header({ title }: { title: string }) {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden fixed inset-0 top-[64px] bg-black h-screen backdrop-blur-lg transition-transform duration-300 ${
+        className={`fixed inset-0 top-[64px] h-screen bg-black backdrop-blur-lg transition-transform duration-300 md:hidden ${
           mobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex flex-col items-center justify-center h-fit mt-5 gap-8 px-6">
+        <div className="mt-5 flex h-fit flex-col items-center justify-center gap-8 px-6">
           {navLinks.map(({ path, name }) => (
             <Link
               key={name}

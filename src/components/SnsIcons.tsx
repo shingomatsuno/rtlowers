@@ -3,13 +3,13 @@ import { FaXTwitter, FaYoutube, FaInstagram, FaTiktok } from "react-icons/fa6";
 
 export default function SnsIcons({ sns }: { sns: SnsData }) {
   return (
-    <div className="flex gap-4 md:gap-6 items-center">
+    <div className="flex items-center gap-4 md:gap-6">
       {sns.xAccount && (
         <a
           href={`https://x.com/${sns.xAccount}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-white transition-colors"
+          className="transition-colors hover:text-white"
         >
           <FaXTwitter size={24} />
         </a>
@@ -19,7 +19,7 @@ export default function SnsIcons({ sns }: { sns: SnsData }) {
           href={`https://www.youtube.com/${sns.youtubeChannel}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-white transition-colors"
+          className="transition-colors hover:text-white"
         >
           <FaYoutube size={24} />
         </a>
@@ -29,7 +29,7 @@ export default function SnsIcons({ sns }: { sns: SnsData }) {
           href={`https://www.instagram.com/${sns.instagramAccount}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-white transition-colors"
+          className="transition-colors hover:text-white"
         >
           <FaInstagram size={24} />
         </a>
@@ -39,7 +39,7 @@ export default function SnsIcons({ sns }: { sns: SnsData }) {
           href={`https://www.tiktok.com/${sns.tiktokAccount}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-white transition-colors"
+          className="transition-colors hover:text-white"
         >
           <FaTiktok size={24} />
         </a>

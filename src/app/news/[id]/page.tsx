@@ -32,11 +32,11 @@ export async function generateMetadata({ params }: Props) {
   const image = detail.eyecatch?.url
     ? [detail.eyecatch.url]
     : bandData.heroImages.map((image, i) => ({
-      url: image.url,
-      width: image.width,
-      height: image.height,
-      alt: `${name} ${i + 1}`,
-    }));
+        url: image.url,
+        width: image.width,
+        height: image.height,
+        alt: `${name} ${i + 1}`,
+      }));
 
   return {
     title,
@@ -72,16 +72,16 @@ export default async function NewsDetail({ params }: Props) {
 
   return (
     <section id="news" className="min-h-full">
-      <div className="max-w-5xl mx-auto py-24 px-6">
-        <div className="md:flex md:gap-6 ">
-          <div className="md:flex-[1.5] mb-10 md:mb-0">
-            <h1 className="md:text-3xl text-2xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
+      <div className="mx-auto max-w-5xl px-6 py-24">
+        <div className="md:flex md:gap-6">
+          <div className="mb-10 md:mb-0 md:flex-[1.5]">
+            <h1 className="mb-8 bg-gradient-to-r from-gray-400 via-gray-200 to-white bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
               {detail.title}
             </h1>
             {detail.eyecatch && (
               <img
                 src={detail.eyecatch.url}
-                className="w-full h-auto rounded-md mb-5"
+                className="mb-5 h-auto w-full rounded-md"
                 alt={detail.title}
               />
             )}

@@ -13,9 +13,9 @@ export default async function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <div className="bg-black text-white flex flex-col min-h-screen">
+        <div className="flex min-h-screen flex-col bg-black text-white">
           <Header title={bandData.title} />
-          <main className="pt-[64px] flex-grow bg-gradient-to-b from-[#0d0d0d] via-[#1a0f1f] to-[#000000]">
+          <main className="flex-grow bg-gradient-to-b from-[#0d0d0d] via-[#1a0f1f] to-[#000000] pt-[64px]">
             {children}
           </main>
           <Footer title={bandData.title} sns={bandData.sns} />

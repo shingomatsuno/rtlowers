@@ -128,13 +128,13 @@ export function ContactForm({
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row gap-4 items-start">
-        <div className="md:w-1/2 w-full bg-gray-900 rounded-lg p-4 shadow-sm flex flex-col">
+      <div className="flex flex-col items-start gap-4 md:flex-row">
+        <div className="flex w-full flex-col rounded-lg bg-gray-900 p-4 shadow-sm md:w-1/2">
           {submited ? (
             <div>{submitedMessage}</div>
           ) : (
             <>
-              <h2 className="text-white font-bold text-base mb-4">
+              <h2 className="mb-4 text-base font-bold text-white">
                 {isTicket
                   ? "ライブチケット取り置き"
                   : "出演依頼や、チケット取り置きなどお気軽にどうぞ～。"}
@@ -150,11 +150,11 @@ export function ContactForm({
 
               {/* ラジオボタン */}
               {!isTicket && (
-                <div className="flex gap-2 my-4">
+                <div className="my-4 flex gap-2">
                   {Object.entries(ContactType).map(([key, value]) => (
                     <label
                       key={value}
-                      className="flex items-center text-white text-sm"
+                      className="flex items-center text-sm text-white"
                     >
                       <input
                         type="radio"
@@ -208,8 +208,8 @@ export function ContactForm({
       </div>
       <div>
         {/* FAQ */}
-        <div className="max-w-3xl mx-auto mt-8">
-          <h2 className="text-xl md:text-3xl font-bold mb-6 text-center">
+        <div className="mx-auto mt-8 max-w-3xl">
+          <h2 className="mb-6 text-center text-xl font-bold md:text-3xl">
             取り置きFAQ
           </h2>
           <Accordion type="single" collapsible>
@@ -219,7 +219,7 @@ export function ContactForm({
                 value={`item-${i}`}
                 className="border-slate-400"
               >
-                <AccordionTrigger className="text-gray-300 font-semibold md:text-lg text-base">
+                <AccordionTrigger className="text-base font-semibold text-gray-300 md:text-lg">
                   {q}
                 </AccordionTrigger>
                 <AccordionContent className="text-gray-200">
@@ -264,9 +264,9 @@ function ContactFormContact({
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
+        className="w-full rounded-md border-gray-700 bg-gray-800 px-2 py-1 text-white"
       />
-      <label className="text-white mt-2 block" htmlFor="email">
+      <label className="mt-2 block text-white" htmlFor="email">
         メールアドレス
       </label>
       <input
@@ -276,9 +276,9 @@ function ContactFormContact({
         onChange={(e) =>
           setContactForm((prev) => ({ ...prev, email: e.target.value }))
         }
-        className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
+        className="w-full rounded-md border-gray-700 bg-gray-800 px-2 py-1 text-white"
       />
-      <label className="text-white mt-2 block" htmlFor="contents">
+      <label className="mt-2 block text-white" htmlFor="contents">
         お問い合わせ内容
       </label>
       <textarea
@@ -288,13 +288,13 @@ function ContactFormContact({
         onChange={(e) =>
           setContactForm((prev) => ({ ...prev, contents: e.target.value }))
         }
-        className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
+        className="w-full rounded-md border-gray-700 bg-gray-800 px-2 py-1 text-white"
       />
       <div className="mt-4 flex justify-end">
         <button
           onClick={onSubmit}
           disabled={buttonDisabled}
-          className="bg-white text-black rounded-md px-4 py-1 hover:bg-gray-300 transition-all duration-200 disabled:cursor-not-allowed"
+          className="rounded-md bg-white px-4 py-1 text-black transition-all duration-200 hover:bg-gray-300 disabled:cursor-not-allowed"
         >
           送信
         </button>
@@ -326,9 +326,8 @@ function ContactFormTicket({
   onSubmit,
   buttonDisabled,
 }: ContactFormTicketProps) {
-
   if (schedules.length === 0) {
-    return <p className="text-sm">開催予定のライブはありません</p>
+    return <p className="text-sm">開催予定のライブはありません</p>;
   }
 
   return (
@@ -341,10 +340,10 @@ function ContactFormTicket({
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
+        className="w-full rounded-md border-gray-700 bg-gray-800 px-2 py-1 text-white"
       />
 
-      <label className="text-white mt-4 block" htmlFor="event">
+      <label className="mt-4 block text-white" htmlFor="event">
         対象のイベント
       </label>
       <select
@@ -353,7 +352,7 @@ function ContactFormTicket({
         onChange={(e) =>
           setTicketForm((prev) => ({ ...prev, eventId: e.target.value }))
         }
-        className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
+        className="w-full rounded-md border-gray-700 bg-gray-800 px-2 py-1 text-white"
       >
         {schedules.map((s) => (
           <option key={s.id} value={s.id}>
@@ -363,12 +362,12 @@ function ContactFormTicket({
       </select>
 
       {isFreeLive && (
-        <div className="text-sm text-red-500 mt-2">
+        <div className="mt-2 text-sm text-red-500">
           無料ライブのため取り置きは不要です。
         </div>
       )}
 
-      <label className="text-white mt-4 block" htmlFor="quantity">
+      <label className="mt-4 block text-white" htmlFor="quantity">
         枚数
       </label>
       <select
@@ -377,7 +376,7 @@ function ContactFormTicket({
         onChange={(e) =>
           setTicketForm((prev) => ({ ...prev, quantity: e.target.value }))
         }
-        className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
+        className="w-full rounded-md border-gray-700 bg-gray-800 px-2 py-1 text-white"
       >
         {Array.from({ length: 9 }, (_, i) => i + 1).map((num) => (
           <option key={num} value={num}>
@@ -386,7 +385,7 @@ function ContactFormTicket({
         ))}
       </select>
 
-      <label className="text-white mt-4 block" htmlFor="memo">
+      <label className="mt-4 block text-white" htmlFor="memo">
         備考
       </label>
       <textarea
@@ -396,14 +395,14 @@ function ContactFormTicket({
         onChange={(e) =>
           setTicketForm((prev) => ({ ...prev, memo: e.target.value }))
         }
-        className="w-full bg-gray-800 rounded-md border-gray-700 text-white px-2 py-1"
+        className="w-full rounded-md border-gray-700 bg-gray-800 px-2 py-1 text-white"
       />
 
       <div className="mt-4 flex justify-end">
         <button
           onClick={onSubmit}
           disabled={buttonDisabled || isFreeLive}
-          className="bg-white text-black rounded-md px-4 py-1 hover:bg-gray-300 transition-all duration-200 disabled:cursor-not-allowed"
+          className="rounded-md bg-white px-4 py-1 text-black transition-all duration-200 hover:bg-gray-300 disabled:cursor-not-allowed"
         >
           送信
         </button>

@@ -9,8 +9,8 @@ export default function Footer({
   sns?: SnsData;
 }) {
   return (
-    <footer className="border-t border-white/10 md:py-8 py-4">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col-reverse md:flex-row justify-between items-center text-white/60 gap-4">
+    <footer className="border-t border-white/10 py-4 md:py-8">
+      <div className="mx-auto flex max-w-7xl flex-col-reverse items-center justify-between gap-4 px-6 text-white/60 md:flex-row">
         {/* 左側（コピーライト） */}
         <p className="text-center md:text-left">
           &copy; 2025 {title}. All rights reserved.

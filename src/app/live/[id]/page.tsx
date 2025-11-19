@@ -26,11 +26,11 @@ export async function generateMetadata({ params }: Props) {
   const eventImage = detail.eyecatch?.url
     ? [detail.eyecatch.url]
     : bandData.heroImages.map((image, i) => ({
-      url: image.url,
-      width: image.width,
-      height: image.height,
-      alt: `${name} ${i + 1}`,
-    }));
+        url: image.url,
+        width: image.width,
+        height: image.height,
+        alt: `${name} ${i + 1}`,
+      }));
 
   const siteUrl =
     (process.env.NEXT_PUBLIC_SITE_URL || "https://example.com") + `/live/${id}`;
@@ -81,89 +81,92 @@ export default async function ScheduleDetail({ params }: Props) {
 
   return (
     <section id="live" className="min-h-full">
-      <div className="max-w-5xl mx-auto py-24 px-6">
+      <div className="mx-auto max-w-5xl px-6 py-24">
         <div className="md:flex md:gap-4">
           <div className="md:flex-[1.5]">
-            <h1 className="md:text-3xl text-2xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-200 to-white">
+            <h1 className="mb-8 bg-gradient-to-r from-gray-400 via-gray-200 to-white bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
               {detail.title}
             </h1>
             {detail.eyecatch && (
               <img
                 src={detail.eyecatch.url}
-                className="w-full h-auto rounded-md mb-5"
+                className="mb-5 h-auto w-full rounded-md"
                 alt={detail.title}
               />
             )}
             <div className="mb-6 flex items-center">
               <div>開催日：</div>
-              <div className="text-lg font-bold ">
+              <div className="text-lg font-bold">
                 {dateFormat(detail.eventDetail.eventDate, "yyyy/MM/dd (EEE)")}
               </div>
             </div>
             <SafeHTML html={detail.content} />
-            <div className="mt-10 p-6 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
-              <h3 className="text-xl font-bold mb-6 text-cyan-400 tracking-wider border-b border-white/10 pb-2">
+            <div className="mt-10 rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+              <h3 className="mb-6 border-b border-white/10 pb-2 text-xl font-bold tracking-wider text-cyan-400">
                 EVENT DETAILS
               </h3>
               <dl className="space-y-4 text-sm md:text-base">
-                <div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
-                  <dt className="text-gray-400 font-semibold">DATE</dt>
-                  <dd className="text-white font-medium text-lg">
-                    {dateFormat(detail.eventDetail.eventDate, "yyyy/MM/dd (EEE)")}
+                <div className="grid grid-cols-[80px_1fr] items-baseline gap-4 md:grid-cols-[100px_1fr]">
+                  <dt className="font-semibold text-gray-400">DATE</dt>
+                  <dd className="text-lg font-medium text-white">
+                    {dateFormat(
+                      detail.eventDetail.eventDate,
+                      "yyyy/MM/dd (EEE)"
+                    )}
                   </dd>
                 </div>
 
-                <div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
-                  <dt className="text-gray-400 font-semibold">TIME</dt>
+                <div className="grid grid-cols-[80px_1fr] items-baseline gap-4 md:grid-cols-[100px_1fr]">
+                  <dt className="font-semibold text-gray-400">TIME</dt>
                   <dd className="text-white">
-                    OPEN {dateFormat(detail.eventDetail.eventOpenTime, 'hh:mm')} / START{" "}
-                    {dateFormat(detail.eventDetail.eventStartTime, 'hh:mm')}
+                    OPEN {dateFormat(detail.eventDetail.eventOpenTime, "hh:mm")}{" "}
+                    / START{" "}
+                    {dateFormat(detail.eventDetail.eventStartTime, "hh:mm")}
                   </dd>
                 </div>
 
-                <div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
-                  <dt className="text-gray-400 font-semibold">VENUE</dt>
+                <div className="grid grid-cols-[80px_1fr] items-baseline gap-4 md:grid-cols-[100px_1fr]">
+                  <dt className="font-semibold text-gray-400">VENUE</dt>
                   <dd className="text-white">{detail.eventDetail.venue}</dd>
                 </div>
 
-                <div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
-                  <dt className="text-gray-400 font-semibold">TICKET</dt>
+                <div className="grid grid-cols-[80px_1fr] items-baseline gap-4 md:grid-cols-[100px_1fr]">
+                  <dt className="font-semibold text-gray-400">TICKET</dt>
                   <dd className="text-white">
                     前売 ¥{detail.eventDetail.ticket} / 当日 ¥
                     {detail.eventDetail.todayTicket}
                   </dd>
                 </div>
 
-                {detail.eventDetail.drink && (<div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
-                  <dt className="text-gray-400 font-semibold">DRINK</dt>
-                  <dd className="text-white">
-                    ¥{detail.eventDetail.drink}
-                  </dd>
-                </div>)
-                }
-
-                {detail.eventDetail.actors && detail.eventDetail.actors.length > 0 && (
-                  <div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
-                    <dt className="text-gray-400 font-semibold">ACT</dt>
-                    <dd className="text-white">
-                      <ul className="flex flex-wrap gap-x-4 gap-y-1">
-                        {detail.eventDetail.actors.map((actor, index) => (
-                          <li key={index} className="relative">
-                            {index > 0 && (
-                              <span className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-500 rounded-full" />
-                            )}
-                            {actor.actor}
-                          </li>
-                        ))}
-                      </ul>
-                    </dd>
+                {detail.eventDetail.drink && (
+                  <div className="grid grid-cols-[80px_1fr] items-baseline gap-4 md:grid-cols-[100px_1fr]">
+                    <dt className="font-semibold text-gray-400">DRINK</dt>
+                    <dd className="text-white">¥{detail.eventDetail.drink}</dd>
                   </div>
                 )}
+
+                {detail.eventDetail.actors &&
+                  detail.eventDetail.actors.length > 0 && (
+                    <div className="grid grid-cols-[80px_1fr] items-baseline gap-4 md:grid-cols-[100px_1fr]">
+                      <dt className="font-semibold text-gray-400">ACT</dt>
+                      <dd className="text-white">
+                        <ul className="flex flex-wrap gap-x-4 gap-y-1">
+                          {detail.eventDetail.actors.map((actor, index) => (
+                            <li key={index} className="relative">
+                              {index > 0 && (
+                                <span className="absolute -left-3 top-1/2 h-1 w-1 -translate-y-1/2 rounded-full bg-gray-500" />
+                              )}
+                              {actor.actor}
+                            </li>
+                          ))}
+                        </ul>
+                      </dd>
+                    </div>
+                  )}
               </dl>
             </div>
-
           </div>
-          <div className="hidden md:flex flex-1 justify-center">
+          <div className="hidden flex-1 justify-center md:flex">
             <LiveArchive
               defaultYearMonth={dateFormat(
                 detail.eventDetail.eventDate,
@@ -183,7 +186,7 @@ export default async function ScheduleDetail({ params }: Props) {
             />
           </div>
         )}
-        <div className="md:hidden block mt-8">
+        <div className="mt-8 block md:hidden">
           <LiveArchive
             defaultYearMonth={dateFormat(
               detail.eventDetail.eventDate,
