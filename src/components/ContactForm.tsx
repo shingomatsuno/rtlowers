@@ -326,6 +326,11 @@ function ContactFormTicket({
   onSubmit,
   buttonDisabled,
 }: ContactFormTicketProps) {
+
+  if (schedules.length === 0) {
+    return <p className="text-sm">開催予定のライブはありません</p>
+  }
+
   return (
     <div>
       <label className="text-white" htmlFor="name">
@@ -359,7 +364,7 @@ function ContactFormTicket({
 
       {isFreeLive && (
         <div className="text-sm text-red-500 mt-2">
-          取り置きできないライブイベントです。
+          無料ライブのため取り置きは不要です。
         </div>
       )}
 

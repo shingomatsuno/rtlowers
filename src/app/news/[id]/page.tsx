@@ -32,23 +32,16 @@ export async function generateMetadata({ params }: Props) {
   const image = detail.eyecatch?.url
     ? [detail.eyecatch.url]
     : bandData.heroImages.map((image, i) => ({
-        url: image.url,
-        width: image.width,
-        height: image.height,
-        alt: `${name} ${i + 1}`,
-      }));
+      url: image.url,
+      width: image.width,
+      height: image.height,
+      alt: `${name} ${i + 1}`,
+    }));
 
   return {
     title,
     description,
-    keywords: [
-      name,
-      "バンド",
-      "インディーズバンド",
-      "邦ロック",
-      "ロック",
-      detail.title,
-    ],
+    keywords: [name, title, ...(bandData.keywords?.split(",") || [])],
     openGraph: {
       title,
       description,

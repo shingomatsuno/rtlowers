@@ -26,11 +26,11 @@ export async function generateMetadata({ params }: Props) {
   const eventImage = detail.eyecatch?.url
     ? [detail.eyecatch.url]
     : bandData.heroImages.map((image, i) => ({
-        url: image.url,
-        width: image.width,
-        height: image.height,
-        alt: `${name} ${i + 1}`,
-      }));
+      url: image.url,
+      width: image.width,
+      height: image.height,
+      alt: `${name} ${i + 1}`,
+    }));
 
   const siteUrl =
     (process.env.NEXT_PUBLIC_SITE_URL || "https://example.com") + `/live/${id}`;
@@ -40,14 +40,7 @@ export async function generateMetadata({ params }: Props) {
   return {
     title,
     description,
-    keywords: [
-      name,
-      "バンド",
-      "インディーズバンド",
-      "邦ロック",
-      "ロック",
-      detail.title,
-    ],
+    keywords: [name, title, ...(bandData.keywords?.split(",") || [])],
     openGraph: {
       title,
       description,
@@ -101,7 +94,74 @@ export default async function ScheduleDetail({ params }: Props) {
                 alt={detail.title}
               />
             )}
+            <div className="mb-6 flex items-center">
+              <div>開催日：</div>
+              <div className="text-lg font-bold ">
+                {dateFormat(detail.eventDetail.eventDate, "yyyy/MM/dd (EEE)")}
+              </div>
+            </div>
             <SafeHTML html={detail.content} />
+            <div className="mt-10 p-6 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+              <h3 className="text-xl font-bold mb-6 text-cyan-400 tracking-wider border-b border-white/10 pb-2">
+                EVENT DETAILS
+              </h3>
+              <dl className="space-y-4 text-sm md:text-base">
+                <div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
+                  <dt className="text-gray-400 font-semibold">DATE</dt>
+                  <dd className="text-white font-medium text-lg">
+                    {dateFormat(detail.eventDetail.eventDate, "yyyy/MM/dd (EEE)")}
+                  </dd>
+                </div>
+
+                <div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
+                  <dt className="text-gray-400 font-semibold">TIME</dt>
+                  <dd className="text-white">
+                    OPEN {dateFormat(detail.eventDetail.eventOpenTime, 'hh:mm')} / START{" "}
+                    {dateFormat(detail.eventDetail.eventStartTime, 'hh:mm')}
+                  </dd>
+                </div>
+
+                <div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
+                  <dt className="text-gray-400 font-semibold">VENUE</dt>
+                  <dd className="text-white">{detail.eventDetail.venue}</dd>
+                </div>
+
+                <div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
+                  <dt className="text-gray-400 font-semibold">TICKET</dt>
+                  <dd className="text-white">
+                    前売 ¥{detail.eventDetail.ticket} / 当日 ¥
+                    {detail.eventDetail.todayTicket}
+                  </dd>
+                </div>
+
+                {detail.eventDetail.drink && (<div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
+                  <dt className="text-gray-400 font-semibold">DRINK</dt>
+                  <dd className="text-white">
+                    ¥{detail.eventDetail.drink}
+                  </dd>
+                </div>)
+                }
+
+                {detail.eventDetail.actors && detail.eventDetail.actors.length > 0 && (
+                  <div className="grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr] gap-4 items-baseline">
+                    <dt className="text-gray-400 font-semibold">ACT</dt>
+                    <dd className="text-white">
+                      <ul className="flex flex-wrap gap-x-4 gap-y-1">
+                        {detail.eventDetail.actors.map((actor, index) => (
+                          <li key={index} className="relative">
+                            {index > 0 && (
+                              <span className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-500 rounded-full" />
+                            )}
+                            {actor.actor}
+                          </li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            </div>
+
           </div>
           <div className="hidden md:flex flex-1 justify-center">
             <LiveArchive

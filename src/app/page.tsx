@@ -91,7 +91,7 @@ export default async function HomePage() {
     <div>
       <section
         id="home"
-        className="relative overflow-hidden bg-gradient-to-b from-black via-[#0f0f0f] to-[#1a1a1a]"
+        className="relative overflow-hidden bg-gradient-to-b from-black via-[#0f0f0f] to-[#0d0d0d]"
       >
         {/* SPがある場合はSPとPCで切り替え */}
         {bandData.heroImagesSp && bandData.heroImagesSp.length > 0 && (
@@ -125,7 +125,7 @@ export default async function HomePage() {
         </div>
       </section>
       {nextEvent && (
-        <section className="relative text-center overflow-hidden bg-gradient-to-b from-black via-[#0f0f0f] to-[#1a1a1a]">
+        <section className="relative text-center overflow-hidden bg-gradient-to-b from-[#0d0d0d] via-[#0f0f0f] to-[#0d0d0d]">
           <div className="max-w-5xl mx-auto py-24 px-6 text-center">
             <div className="text-4xl font-extrabold mb-4 inline-block animate-interval-rotate text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 drop-shadow-[0_0_10px_rgba(0,255,255,0.6)]">
               Next LIVE!!
@@ -150,13 +150,18 @@ export default async function HomePage() {
       )}
       <section
         id="news"
-        className="min-h-screen bg-gradient-to-b from-[#0d0d0d] via-[#1a0f1f] to-[#000000]"
+        className="min-h-screen bg-gradient-to-b from-[#0d0d0d] via-[#1a0f1f] to-[#0d0d0d]"
       >
         <div className="max-w-5xl mx-auto py-24 px-6">
           <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-200 via-gray-100 to-white drop-shadow-[0_0_6px_rgba(255,255,255,0.3)] animate-fadeInUp">
             NEWS
           </h2>
-          <AnnouncementList list={announceList.contents} />
+          {
+            announceList.contents.length > 0 && <AnnouncementList list={announceList.contents} />
+          }
+          {
+            announceList.contents.length == 0 && <p>ニュースはありません</p>
+          }
         </div>
       </section>
       <section
@@ -167,7 +172,12 @@ export default async function HomePage() {
           <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-200 via-gray-100 to-white drop-shadow-[0_0_6px_rgba(255,255,255,0.3)] animate-fadeInUp">
             LIVE
           </h2>
-          <EventList list={schedules.contents} />
+          {
+            schedules.contents.length > 0 && <EventList list={schedules.contents} />
+          }
+          {
+            schedules.contents.length == 0 && <p>ライブはありません</p>
+          }
         </div>
       </section>
       <section
@@ -203,7 +213,7 @@ export default async function HomePage() {
       </section>
       <section
         id="music"
-        className="min-h-screen bg-gradient-to-b from-[#0a0a0a] via-[#1a0026] to-[#000000]"
+        className="min-h-screen bg-gradient-to-b from-[#1a0f0f] via-[#1a0026] to-[#000000]"
       >
         <div className="max-w-5xl mx-auto py-24 px-6">
           <h2 className="text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-200 via-gray-100 to-white drop-shadow-[0_0_6px_rgba(255,255,255,0.3)] animate-fadeInUp">
