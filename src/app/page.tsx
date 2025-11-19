@@ -233,6 +233,25 @@ export default async function HomePage() {
           <ContactForm schedules={futureLives.contents} sns={bandData.sns} />
         </div>
       </section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "MusicGroup",
+            name: bandData.title,
+            description: bandData.description,
+            url: process.env.NEXT_PUBLIC_SITE_URL,
+            image: bandData.heroImages.map((img) => img.url),
+            sameAs: [
+              bandData.sns?.xAccount &&
+                `https://twitter.com/${bandData.sns.xAccount.replace("@", "")}`,
+              bandData.sns?.instagramAccount &&
+                `https://instagram.com/${bandData.sns.instagramAccount}`,
+            ].filter(Boolean),
+          }),
+        }}
+      />
     </div>
   );
 }

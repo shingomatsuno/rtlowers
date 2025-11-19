@@ -195,6 +195,44 @@ export default async function ScheduleDetail({ params }: Props) {
           />
         </div>
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "MusicEvent",
+            name: detail.title,
+            startDate: detail.eventDetail.eventDate,
+            eventStatus: "https://schema.org/EventScheduled",
+            eventAttendanceMode:
+              "https://schema.org/OfflineEventAttendanceMode",
+            location: {
+              "@type": "Place",
+              name: detail.eventDetail.venue,
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: "JP",
+              },
+            },
+            image: [
+              detail.eyecatch?.url,
+              ...bandData.heroImages.map((i) => i.url),
+            ].filter(Boolean),
+            description: detail.content,
+            performer: {
+              "@type": "MusicGroup",
+              name: bandData.title,
+            },
+            offers: {
+              "@type": "Offer",
+              price: detail.eventDetail.ticket,
+              priceCurrency: "JPY",
+              url: `${process.env.NEXT_PUBLIC_SITE_URL}/live/${id}`,
+              availability: "https://schema.org/InStock",
+            },
+          }),
+        }}
+      />
     </section>
   );
 }

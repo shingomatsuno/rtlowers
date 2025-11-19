@@ -122,7 +122,7 @@ export function ScrollAnimationTrigger({
           ? { scale: toScale, opacity: 1 }
           : { scale: fromScale, opacity: 0 };
         break;
-      case "slide":
+      case "slide": {
         const offset = 50;
         const directionOffsets = {
           up: { y: offset, x: 0 },
@@ -135,6 +135,7 @@ export function ScrollAnimationTrigger({
           ? { x: 0, y: 0, opacity: 1 }
           : { ...directionOffsets[direction], opacity: 0 };
         break;
+      }
       case "color":
         baseProps.style = { color: textColor };
         break;

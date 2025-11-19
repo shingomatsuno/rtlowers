@@ -92,6 +92,23 @@ export default async function NewsDetail({ params }: Props) {
           </div>
         </div>
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "NewsArticle",
+            headline: detail.title,
+            image: [detail.eyecatch?.url].filter(Boolean),
+            datePublished: detail.publishedAt,
+            dateModified: detail.updatedAt,
+            author: {
+              "@type": "Organization",
+              name: "Rt.Lowers",
+            },
+          }),
+        }}
+      />
     </section>
   );
 }
