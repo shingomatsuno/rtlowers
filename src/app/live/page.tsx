@@ -1,4 +1,5 @@
-import { EventList } from "@/components/EventList";
+import { LiveSection } from "@/components/LiveSection";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import { client } from "@/lib/client";
 import { Live } from "@/types/type";
 
@@ -15,23 +16,28 @@ export default async function LivePage() {
   >({
     endpoint: "lives",
     queries: {
-      fields: "id,title,eyecatch,eventDetail.eventDate",
+      fields: "id,title,eyecatch,eventDetail.eventDate,eventDetail.venue",
       orders: "-eventDetail.eventDate",
     },
   });
 
   return (
     <section id="live-list" className="min-h-full">
-      <div className="mx-auto max-w-5xl px-6 py-24">
-        <h1 className="animate-fadeInUp mb-8 bg-gradient-to-r from-gray-200 via-gray-100 to-white bg-clip-text text-5xl font-bold text-transparent drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]">
-          LIVE
-        </h1>
-        <div className="flex justify-center">
-          <div className="w-full">
-            {contents.length > 0 && <EventList list={contents} />}
-            {contents.length == 0 && <p>ライブはありません</p>}
-          </div>
-        </div>
+      <div className="mx-auto max-w-6xl px-6 py-24">
+        <ScrollReveal>
+          <h1 className="mb-12 text-5xl font-black tracking-tighter text-white md:text-7xl">
+            LIVE
+            <span className="block text-lg font-normal tracking-widest text-purple-500">
+              UPCOMING SHOWS
+            </span>
+          </h1>
+        </ScrollReveal>
+
+        {contents.length > 0 ? (
+          <LiveSection list={contents} />
+        ) : (
+          <p className="text-gray-500">ライブはありません</p>
+        )}
       </div>
     </section>
   );

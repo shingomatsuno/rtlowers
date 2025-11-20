@@ -1,4 +1,5 @@
-import { AnnouncementList } from "@/components/AnnouncementList";
+import { NewsSection } from "@/components/NewsSection";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import { client } from "@/lib/client";
 import { Announce } from "@/types/type";
 
@@ -22,16 +23,21 @@ export default async function NewsPage() {
 
   return (
     <section id="news-list" className="min-h-full">
-      <div className="mx-auto max-w-5xl px-6 py-24">
-        <h1 className="animate-fadeInUp mb-8 bg-gradient-to-r from-gray-200 via-gray-100 to-white bg-clip-text text-5xl font-bold text-transparent drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]">
-          NEWS
-        </h1>
-        <div className="flex justify-center">
-          <div className="w-full">
-            {contents.length > 0 && <AnnouncementList list={contents} />}
-            {contents.length == 0 && <p>ニュースはありません</p>}
-          </div>
-        </div>
+      <div className="mx-auto max-w-6xl px-6 py-24">
+        <ScrollReveal>
+          <h1 className="mb-12 text-5xl font-black tracking-tighter text-white md:text-7xl">
+            NEWS
+            <span className="block text-lg font-normal tracking-widest text-cyan-500">
+              ALL UPDATES
+            </span>
+          </h1>
+        </ScrollReveal>
+
+        {contents.length > 0 ? (
+          <NewsSection list={contents} />
+        ) : (
+          <p className="text-gray-500">ニュースはありません</p>
+        )}
       </div>
     </section>
   );
