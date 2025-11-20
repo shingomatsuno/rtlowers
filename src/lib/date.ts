@@ -17,6 +17,9 @@ export function dateFormat(
   date: Date | string | number,
   format = "yyyy/MM/dd"
 ): string {
+  if (!date) {
+    return "";
+  }
   try {
     return formatInTimeZone(date, "Asia/Tokyo", format, { locale: ja });
   } catch (e) {

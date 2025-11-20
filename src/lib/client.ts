@@ -70,7 +70,7 @@ export async function getFutureLives() {
   return await client.getList({
     endpoint: "lives",
     queries: {
-      fields: "id,title,eyecatch,eventDetail.eventDate",
+      fields: "id,title,eyecatch,eventDetail",
       orders: "-eventDetail.eventDate",
       filters: `eventDetail.eventDate[greater_than]${isoString}[or]eventDetail.eventDate[begins_with]${isoString.substring(
         0,

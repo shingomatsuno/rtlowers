@@ -1,12 +1,15 @@
-import { AnnouncementList } from "@/components/AnnouncementList";
-import { EventList } from "@/components/EventList";
-import { ContactForm } from "@/components/ContactForm";
 import { client, getBandData, getFutureLives } from "@/lib/client";
-import { dateFormat, getNextSchedule } from "@/lib/date";
+import { getNextSchedule } from "@/lib/date";
 import { Announce, BandData, Live } from "@/types/type";
-import YoutubeEmbed from "@/components/YoutubeEmbed";
 import Link from "next/link";
 import { SafeHTML } from "@/components/SafeHtml";
+import { Hero } from "@/components/Hero";
+import { ScrollReveal } from "@/components/ScrollReveal";
+import { NewsSection } from "@/components/NewsSection";
+import { LiveSection } from "@/components/LiveSection";
+import { FeaturedLive } from "@/components/FeaturedLive";
+import YoutubeEmbed from "@/components/YoutubeEmbed";
+import { ContactForm } from "@/components/ContactForm";
 
 export const revalidate = 600;
 
@@ -15,7 +18,6 @@ export async function generateMetadata() {
 
   const name = bandData.title;
   const description = bandData.description;
-
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com";
   const title = `${name}`;
   const sns = bandData.sns;
@@ -70,7 +72,7 @@ export default async function HomePage() {
         queries: {
           fields: "id,title,publishedAt",
           orders: "-publishedAt",
-          limit: 5,
+          limit: 6,
         },
       }),
       client.getList<Pick<Live, "id" | "title" | "eyecatch" | "eventDetail">>({
@@ -78,181 +80,199 @@ export default async function HomePage() {
         queries: {
           fields: "id,title,eyecatch,eventDetail.eventDate",
           orders: "-eventDetail.eventDate",
-          limit: 5,
         },
       }),
       getFutureLives(),
     ]);
 
-  // chedulesの中から、未来で、一番近い日付のものを取得
   const nextEvent = getNextSchedule(schedules.contents);
 
   return (
-    <div>
-      <section
-        id="home"
-        className="relative overflow-hidden bg-gradient-to-b from-black via-[#0f0f0f] to-[#0d0d0d]"
-      >
-        {/* SPがある場合はSPとPCで切り替え */}
-        {bandData.heroImagesSp && bandData.heroImagesSp.length > 0 && (
-          <>
-            <img
-              src={bandData.heroImagesSp[0].url}
-              alt="Hero sp"
-              className="block h-auto w-full animate-[scale_20s_ease-in-out_infinite_alternate] object-cover opacity-60 md:hidden"
-            />
-            <img
-              src={bandData.heroImages[0].url}
-              alt="Hero"
-              className="mx-auto hidden h-auto w-full max-w-[1280px] animate-[scale_20s_ease-in-out_infinite_alternate] object-cover opacity-60 md:block"
-            />
-          </>
-        )}
-        {/* SPがない場合はPC画像で統一 */}
-        {!bandData.heroImagesSp ||
-          (bandData.heroImagesSp.length == 0 && (
-            <img
-              src={bandData.heroImages[0].url}
-              alt="Hero"
-              className="mx-auto h-auto w-full max-w-[1280px] animate-[scale_20s_ease-in-out_infinite_alternate] object-cover opacity-60"
-            />
-          ))}
-        <div className="absolute bottom-3 w-full text-center">
-          <h1 className="mx-auto font-[math] text-4xl font-bold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] md:text-8xl">
-            {bandData.title}
-          </h1>
-          <p className="text-sm font-bold md:text-lg">{bandData.description}</p>
-        </div>
+    <div className="bg-black text-white selection:bg-cyan-500 selection:text-black">
+      <section id="home">
+        <Hero bandData={bandData} />
       </section>
       {nextEvent && (
-        <section className="relative overflow-hidden bg-gradient-to-b from-[#0d0d0d] via-[#0f0f0f] to-[#0d0d0d] text-center">
-          <div className="mx-auto max-w-5xl px-6 py-24 text-center">
-            <div className="animate-interval-rotate mb-4 inline-block bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 bg-clip-text text-4xl font-extrabold text-transparent drop-shadow-[0_0_10px_rgba(0,255,255,0.6)]">
-              Next LIVE!!
-            </div>
-            <h2 className="mb-8 bg-gradient-to-r from-gray-400 via-gray-200 to-white bg-clip-text text-5xl font-bold text-transparent">
-              {nextEvent.title}
-            </h2>
-            <div className="text-lg text-gray-300">
-              {dateFormat(nextEvent.eventDetail.eventDate, "yyyy/MM/dd (EEE)")}
-            </div>
-            <div className="text-lg text-gray-300">
-              {nextEvent.eventDetail.venue}
-            </div>
-            <Link
-              href={`/live/${nextEvent.id}`}
-              className="mt-6 inline-block rounded-full border border-cyan-500 px-8 py-3 text-lg font-semibold text-cyan-300 transition-all duration-300 hover:bg-cyan-500 hover:text-black hover:shadow-[0_0_20px_rgba(0,255,255,0.7)]"
-            >
-              詳細を見る →
-            </Link>
-          </div>
+        <section className="relative z-10 mt-20 px-6 pb-24">
+          <FeaturedLive live={nextEvent} />
         </section>
       )}
+
       <section
         id="news"
-        className="min-h-screen bg-gradient-to-b from-[#0d0d0d] via-[#1a0f1f] to-[#0d0d0d]"
+        className="relative overflow-hidden bg-[#050505] py-24"
       >
-        <div className="mx-auto max-w-5xl px-6 py-24">
-          <h2 className="animate-fadeInUp mb-8 bg-gradient-to-r from-gray-200 via-gray-100 to-white bg-clip-text text-5xl font-bold text-transparent drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]">
-            NEWS
-          </h2>
-          {announceList.contents.length > 0 && (
-            <>
-              <AnnouncementList list={announceList.contents} />
-              <div className="mt-8 text-center">
-                <Link
-                  href="/news"
-                  className="inline-block rounded-full border border-white/30 px-8 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10 hover:text-cyan-400"
-                >
-                  VIEW MORE
-                </Link>
-              </div>
-            </>
-          )}
-          {announceList.contents.length == 0 && <p>ニュースはありません</p>}
-        </div>
-      </section>
-      <section
-        id="live"
-        className="min-h-screen bg-gradient-to-b from-[#0d0d0d] via-[#1a0f1f] to-[#000000]"
-      >
-        <div className="mx-auto max-w-5xl px-6 py-24">
-          <h2 className="animate-fadeInUp mb-8 bg-gradient-to-r from-gray-200 via-gray-100 to-white bg-clip-text text-5xl font-bold text-transparent drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]">
-            LIVE
-          </h2>
-          {schedules.contents.length > 0 && (
-            <>
-              <EventList list={schedules.contents} />
-              <div className="mt-8 text-center">
-                <Link
-                  href="/live"
-                  className="inline-block rounded-full border border-white/30 px-8 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10 hover:text-cyan-400"
-                >
-                  VIEW MORE
-                </Link>
-              </div>
-            </>
-          )}
-          {schedules.contents.length == 0 && <p>ライブはありません</p>}
-        </div>
-      </section>
-      <section
-        id="about"
-        className="min-h-screen bg-gradient-to-b from-[#000000] via-[#0f0f1a] to-[#1a0f0f]"
-      >
-        <div className="mx-auto max-w-5xl px-6 py-24">
-          <h2 className="animate-fadeInUp mb-8 bg-gradient-to-r from-gray-200 via-gray-100 to-white bg-clip-text text-5xl font-bold text-transparent drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]">
-            ABOUT
-          </h2>
-          <div className="flex flex-col items-start gap-10">
-            <div className="relative flex w-full justify-center">
-              <div className="relative overflow-hidden rounded-2xl shadow-lg">
-                <img
-                  src={aboutMovieData.about.image.url}
-                  alt="bio image"
-                  className="object-cover transition-transform duration-500 hover:scale-105"
-                />
-              </div>
+        <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="mx-auto max-w-6xl px-6">
+          <ScrollReveal>
+            <div className="mb-12 flex items-end justify-between">
+              <h2 className="text-5xl font-black tracking-tighter text-white md:text-7xl">
+                NEWS
+                <span className="block text-lg font-normal tracking-widest text-cyan-500">
+                  LATEST UPDATES
+                </span>
+              </h2>
+              <Link
+                href="/news"
+                className="hidden text-sm font-bold tracking-widest text-gray-400 hover:text-white md:block"
+              >
+                VIEW ALL →
+              </Link>
             </div>
-            <div className="w-full space-y-6">
-              <SafeHTML html={aboutMovieData.about.bio} />
-              <ul className="text-sm text-gray-300">
-                {aboutMovieData.about.members.map((m, i) => (
-                  <li key={i}>
-                    {m.part} {m.name}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          </ScrollReveal>
+
+          {announceList.contents.length > 0 ? (
+            <NewsSection list={announceList.contents} />
+          ) : (
+            <p className="text-gray-500">No news available.</p>
+          )}
+
+          <div className="mt-8 text-center md:hidden">
+            <Link
+              href="/news"
+              className="text-sm font-bold tracking-widest text-gray-400 hover:text-white"
+            >
+              VIEW ALL →
+            </Link>
           </div>
         </div>
       </section>
+
+      <section
+        id="live"
+        className="relative overflow-hidden bg-[#0a0a0a] py-24"
+      >
+        <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="mx-auto max-w-6xl px-6">
+          <ScrollReveal>
+            <div className="mb-12 flex items-end justify-between">
+              <h2 className="text-5xl font-black tracking-tighter text-white md:text-7xl">
+                LIVE
+                <span className="block text-lg font-normal tracking-widest text-purple-500">
+                  UPCOMING SHOWS
+                </span>
+              </h2>
+              <Link
+                href="/live"
+                className="hidden text-sm font-bold tracking-widest text-gray-400 hover:text-white md:block"
+              >
+                VIEW ALL →
+              </Link>
+            </div>
+          </ScrollReveal>
+
+          {schedules.contents.length > 0 ? (
+            <LiveSection list={schedules.contents} />
+          ) : (
+            <p className="text-gray-500">No lives scheduled.</p>
+          )}
+
+          <div className="mt-8 text-center md:hidden">
+            <Link
+              href="/live"
+              className="text-sm font-bold tracking-widest text-gray-400 hover:text-white"
+            >
+              VIEW ALL →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="about"
+        className="relative overflow-hidden bg-[#050505] py-24"
+      >
+        <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="mx-auto max-w-6xl px-6">
+          <ScrollReveal>
+            <h2 className="mb-16 text-center text-5xl font-black tracking-tighter text-white md:text-7xl">
+              ABOUT
+            </h2>
+          </ScrollReveal>
+
+          <div className="grid gap-12 md:grid-cols-2 md:items-center">
+            <ScrollReveal className="relative">
+              <div className="relative overflow-hidden rounded-2xl">
+                <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 mix-blend-overlay" />
+                <img
+                  src={aboutMovieData.about.image.url}
+                  alt="Band"
+                  className="w-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-6 -z-10 h-full w-full rounded-2xl border border-white/5 bg-white/5" />
+            </ScrollReveal>
+
+            <ScrollReveal delay={0.2}>
+              <div className="space-y-8">
+                <div className="prose prose-invert prose-lg">
+                  <SafeHTML html={aboutMovieData.about.bio} />
+                </div>
+
+                <div className="space-y-4 border-t border-white/10 pt-8">
+                  <h3 className="text-sm font-bold tracking-widest text-gray-500">
+                    MEMBERS
+                  </h3>
+                  <ul className="grid grid-cols-2 gap-4">
+                    {aboutMovieData.about.members.map((m, i) => (
+                      <li key={i} className="flex flex-col">
+                        <span className="text-lg font-bold text-white">
+                          {m.name}
+                        </span>
+                        <span className="text-sm text-cyan-500">{m.part}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
       <section
         id="music"
-        className="min-h-screen bg-gradient-to-b from-[#1a0f0f] via-[#1a0026] to-[#000000]"
+        className="relative overflow-hidden bg-[#0a0a0a] py-24"
       >
-        <div className="mx-auto max-w-5xl px-6 py-24">
-          <h2 className="animate-fadeInUp mb-8 bg-gradient-to-r from-gray-200 via-gray-100 to-white bg-clip-text text-5xl font-bold text-transparent drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]">
-            MUSIC
-          </h2>
-          <div className="flex flex-col gap-4 md:px-8">
+        <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="mx-auto max-w-6xl px-6">
+          <ScrollReveal>
+            <h2 className="mb-16 text-center text-5xl font-black tracking-tighter text-white md:text-7xl">
+              MUSIC
+            </h2>
+          </ScrollReveal>
+
+          <div className="grid gap-8 md:grid-cols-2">
             {aboutMovieData.movies.map((m, i) => (
-              <YoutubeEmbed key={i} videoId={m.videoId} />
+              <ScrollReveal key={i} delay={i * 0.1}>
+                <div className="overflow-hidden rounded-xl border border-white/10 bg-black shadow-2xl">
+                  <YoutubeEmbed videoId={m.videoId} />
+                </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
+
       <section
         id="contact"
-        className="min-h-screen bg-gradient-to-b from-[#000000] via-[#111111] to-[#0d0d0d]"
+        className="relative overflow-hidden bg-gradient-to-b from-[#050505] to-black py-24"
       >
-        <div className="mx-auto max-w-5xl px-6 py-24">
-          <h2 className="animate-fadeInUp mb-8 bg-gradient-to-r from-gray-200 via-gray-100 to-white bg-clip-text text-5xl font-bold text-transparent drop-shadow-[0_0_6px_rgba(255,255,255,0.3)]">
-            CONTACT
-          </h2>
-          <ContactForm schedules={futureLives.contents} sns={bandData.sns} />
+        <div className="mx-auto max-w-4xl px-6">
+          <ScrollReveal>
+            <h2 className="mb-12 text-center text-5xl font-black tracking-tighter text-white md:text-7xl">
+              CONTACT
+            </h2>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl md:p-12">
+              <ContactForm
+                schedules={futureLives.contents}
+                sns={bandData.sns}
+              />
+            </div>
+          </ScrollReveal>
         </div>
       </section>
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
