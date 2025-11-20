@@ -84,7 +84,7 @@ export default async function ScheduleDetail({ params }: Props) {
       <div className="mx-auto max-w-5xl px-6 py-24">
         <div className="md:flex md:gap-4">
           <div className="md:flex-[1.5]">
-            <h1 className="mb-8 bg-gradient-to-r from-gray-400 via-gray-200 to-white bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
+            <h1 className="mb-8 text-2xl font-bold text-white md:text-3xl">
               {detail.title}
             </h1>
             {detail.eyecatch && (
