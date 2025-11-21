@@ -1,21 +1,10 @@
 import { LatestNews } from "@/components/LatestNews";
 import { SafeHTML } from "@/components/SafeHtml";
-import { client, getAnnounceDetail } from "@/lib/client";
+import { getAnnounceDetail } from "@/lib/client";
 import { getBandData } from "@/lib/client";
 
-export const revalidate = 600; // ISR: 10分ごとに再生成
-export const dynamic = "force-static";
 interface Props {
   params: Promise<{ id: string }>;
-}
-
-export async function generateStaticParams() {
-  const contents = await client.getAllContentIds({
-    endpoint: "announcements",
-  });
-  return contents.map((id) => ({
-    id,
-  }));
 }
 
 export async function generateMetadata({ params }: Props) {
@@ -66,9 +55,20 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
+import { notFound } from "next/navigation";
+
 export default async function NewsDetail({ params }: Props) {
   const { id } = await params;
-  const detail = await getAnnounceDetail(id);
+  let detail;
+  try {
+    detail = await getAnnounceDetail(id);
+  } catch {
+    notFound();
+  }
+
+  if (!detail) {
+    notFound();
+  }
 
   return (
     <section id="news" className="min-h-full">

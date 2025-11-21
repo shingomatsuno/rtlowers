@@ -8,8 +8,6 @@ export const metadata = {
   description: "Rt.Lowersのニュース一覧",
 };
 
-export const revalidate = 600;
-
 export default async function NewsPage() {
   const { contents } = await client.getList<
     Pick<Announce, "id" | "title" | "publishedAt">

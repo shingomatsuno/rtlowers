@@ -8,8 +8,6 @@ export const metadata = {
   description: "Rt.Lowersのライブ一覧",
 };
 
-export const revalidate = 600;
-
 export default async function LivePage() {
   const { contents } = await client.getList<
     Pick<Live, "id" | "title" | "eyecatch" | "eventDetail">

@@ -1,21 +1,9 @@
 import { ContactForm } from "@/components/ContactForm";
 import { LiveArchive } from "@/components/LiveArchive";
 import { SafeHTML } from "@/components/SafeHtml";
-import { client, getFutureLives, getLiveDetail } from "@/lib/client";
+import { getFutureLives, getLiveDetail } from "@/lib/client";
 import { getBandData } from "@/lib/client";
 import { dateFormat, isValidUtcDate } from "@/lib/date";
-
-export const revalidate = 600;
-export const dynamic = "force-static";
-
-export async function generateStaticParams() {
-  const contents = await client.getAllContentIds({
-    endpoint: "lives",
-  });
-  return contents.map((id) => ({
-    id,
-  }));
-}
 
 export async function generateMetadata({ params }: Props) {
   const bandData = await getBandData();
@@ -70,13 +58,24 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+import { notFound } from "next/navigation";
+
 export default async function ScheduleDetail({ params }: Props) {
   const { id } = await params;
-  const [bandData, detail, { contents }] = await Promise.all([
-    getBandData(),
-    getLiveDetail(id),
-    getFutureLives(),
-  ]);
+  let bandData, detail, contents;
+  try {
+    [bandData, detail, { contents }] = await Promise.all([
+      getBandData(),
+      getLiveDetail(id),
+      getFutureLives(),
+    ]);
+  } catch {
+    notFound();
+  }
+
+  if (!detail) {
+    notFound();
+  }
 
   const validDate = isValidUtcDate(detail.eventDetail.eventDate);
 

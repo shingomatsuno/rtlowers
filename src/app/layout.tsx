@@ -3,6 +3,8 @@ import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getBandData } from "@/lib/client";
 
+export const runtime = "edge";
+
 export const metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://example.com"
