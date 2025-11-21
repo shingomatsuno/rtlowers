@@ -1,6 +1,8 @@
 import { client } from "@/lib/client";
 import { MetadataRoute } from "next";
 
+export const runtime = "edge";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
 
@@ -16,7 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
 
   // 固定ページ
-  const staticPages = [""].map((path) => ({
+  const staticPages = ["/news", "/live", "/"].map((path) => ({
     url: `${siteUrl}${path}`,
   }));
 
