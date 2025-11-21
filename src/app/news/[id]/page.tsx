@@ -6,7 +6,7 @@ import { getBandData } from "@/lib/client";
 export const revalidate = 600; // ISR: 10分ごとに再生成
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateStaticParams() {
@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props) {
   const bandData = await getBandData();
-  const { id } = params;
+  const { id } = await params;
   const detail = await getAnnounceDetail(id);
   const name = bandData.title;
   const description = bandData.description;
