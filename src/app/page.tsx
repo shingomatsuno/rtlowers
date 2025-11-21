@@ -149,7 +149,7 @@ export default async function HomePage() {
               <h2 className="text-5xl font-black tracking-tighter text-white md:text-7xl">
                 LIVE
                 <span className="block text-lg font-normal tracking-widest text-purple-500">
-                  UPCOMING SHOWS
+                  LIVE SCHEDULE
                 </span>
               </h2>
               <Link
@@ -216,10 +216,10 @@ export default async function HomePage() {
                   <ul className="grid grid-cols-2 gap-4">
                     {aboutMovieData.about.members.map((m, i) => (
                       <li key={i} className="flex flex-col">
+                        <span className="text-sm text-cyan-500">{m.part}</span>
                         <span className="text-lg font-bold text-white">
                           {m.name}
                         </span>
-                        <span className="text-sm text-cyan-500">{m.part}</span>
                       </li>
                     ))}
                   </ul>

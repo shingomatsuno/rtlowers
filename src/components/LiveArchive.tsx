@@ -58,7 +58,7 @@ export function LiveArchive({
   }
 
   return (
-    <div>
+    <div className="mx-auto w-fit">
       <Calendar
         className="rounded-md bg-gray-900 text-slate-100"
         mode="single"

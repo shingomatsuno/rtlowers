@@ -72,7 +72,7 @@ export default async function NewsDetail({ params }: Props) {
 
   return (
     <section id="news" className="min-h-full">
-      <div className="mx-auto max-w-5xl px-6 py-24">
+      <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="md:flex md:gap-6">
           <div className="mb-10 md:mb-0 md:flex-[1.5]">
             <h1 className="mb-8 text-2xl font-bold text-white md:text-3xl">

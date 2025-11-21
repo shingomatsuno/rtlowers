@@ -6,13 +6,17 @@ import { BandData } from "@/types/type";
 export const Hero = ({
   bandData,
 }: {
-  bandData: Pick<BandData, "title" | "description" | "heroImages">;
+  bandData: Pick<
+    BandData,
+    "title" | "description" | "heroImages" | "heroImagesSp"
+  >;
 }) => {
   return (
     <section className="relative h-screen w-full overflow-hidden">
       {/* Background Image with Parallax/Zoom effect */}
       <div className="absolute inset-0 z-0">
-        {bandData.heroImages[0] && (
+        {!bandData.heroImagesSp[0] && bandData.heroImages[0] && (
+          // スマホ画像なし
           <motion.img
             src={bandData.heroImages[0].url}
             alt="Hero Background"
@@ -26,6 +30,36 @@ export const Hero = ({
               ease: "easeInOut",
             }}
           />
+        )}
+        {bandData.heroImagesSp[0] && bandData.heroImages[0] && (
+          <>
+            <motion.img
+              src={bandData.heroImagesSp[0].url}
+              alt="Hero Background"
+              className="block h-full w-full object-cover opacity-50 md:hidden"
+              initial={{ scale: 1.1 }}
+              animate={{ scale: 1 }}
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+              }}
+            />
+            <motion.img
+              src={bandData.heroImages[0].url}
+              alt="Hero Background"
+              className="hidden h-full w-full object-cover opacity-50 md:block"
+              initial={{ scale: 1.1 }}
+              animate={{ scale: 1 }}
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+              }}
+            />
+          </>
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-[#0d0d0d]" />
       </div>

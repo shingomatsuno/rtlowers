@@ -22,13 +22,13 @@ export default async function LivePage() {
   });
 
   return (
-    <section id="live-list" className="min-h-full">
-      <div className="mx-auto max-w-6xl px-6 py-24">
+    <section id="live" className="min-h-full">
+      <div className="mx-auto max-w-6xl px-6 py-12">
         <ScrollReveal>
           <h1 className="mb-12 text-5xl font-black tracking-tighter text-white md:text-7xl">
             LIVE
             <span className="block text-lg font-normal tracking-widest text-purple-500">
-              UPCOMING SHOWS
+              LIVE SCHEDULE
             </span>
           </h1>
         </ScrollReveal>

@@ -81,7 +81,7 @@ export default async function ScheduleDetail({ params }: Props) {
 
   return (
     <section id="live" className="min-h-full">
-      <div className="mx-auto max-w-5xl px-6 py-24">
+      <div className="mx-auto max-w-5xl px-6 py-12">
         <div className="md:flex md:gap-4">
           <div className="md:flex-[1.5]">
             <h1 className="mb-8 text-2xl font-bold text-white md:text-3xl">
@@ -132,10 +132,15 @@ export default async function ScheduleDetail({ params }: Props) {
 
                 <div className="grid grid-cols-[80px_1fr] items-baseline gap-4 md:grid-cols-[100px_1fr]">
                   <dt className="font-semibold text-gray-400">TICKET</dt>
-                  <dd className="text-white">
-                    前売 ¥{detail.eventDetail.ticket} / 当日 ¥
-                    {detail.eventDetail.todayTicket}
-                  </dd>
+                  {!detail.eventDetail.ticket &&
+                  !detail.eventDetail.todayTicket ? (
+                    <dd>無料</dd>
+                  ) : (
+                    <dd className="text-white">
+                      前売 ¥{detail.eventDetail.ticket} / 当日 ¥
+                      {detail.eventDetail.todayTicket}
+                    </dd>
+                  )}
                 </div>
 
                 {detail.eventDetail.drink && (

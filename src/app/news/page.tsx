@@ -22,8 +22,8 @@ export default async function NewsPage() {
   });
 
   return (
-    <section id="news-list" className="min-h-full">
-      <div className="mx-auto max-w-6xl px-6 py-24">
+    <section id="news" className="min-h-full">
+      <div className="mx-auto max-w-6xl px-6 py-12">
         <ScrollReveal>
           <h1 className="mb-12 text-5xl font-black tracking-tighter text-white md:text-7xl">
             NEWS
