@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 import { LatestNews } from "@/components/LatestNews";
 import { SafeHTML } from "@/components/SafeHtml";
 import { client, getAnnounceDetail } from "@/lib/client";

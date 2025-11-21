@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 import { client } from "@/lib/client";
 import { Live } from "@/types/type";
 import { NextResponse } from "next/server";
