@@ -1,4 +1,6 @@
-# Opt into backwards-incompatible changes through September 14, 2021.
-compatibility_date = "2025-11-22"
-# Also opt into an upcoming fix to the FormData API.
-compatibility_flags = [ "nodejs_compat" ]
+# wrangler.toml
+[pages]
+# Pages Functionsの設定を定義する
+[pages.functions]
+# 互換性フラグ (Compatibility flags)
+compatibility_flags = ["nodejs_compat"]
