@@ -6,6 +6,7 @@ import { getBandData } from "@/lib/client";
 import { dateFormat, isValidUtcDate } from "@/lib/date";
 
 export const revalidate = 600;
+export const dynamic = "force-static";
 
 export async function generateStaticParams() {
   const contents = await client.getAllContentIds({

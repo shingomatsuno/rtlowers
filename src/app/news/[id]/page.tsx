@@ -4,7 +4,7 @@ import { client, getAnnounceDetail } from "@/lib/client";
 import { getBandData } from "@/lib/client";
 
 export const revalidate = 600; // ISR: 10分ごとに再生成
-
+export const dynamic = "force-static";
 interface Props {
   params: Promise<{ id: string }>;
 }
