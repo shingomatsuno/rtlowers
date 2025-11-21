@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Live } from "@/types/type";
 import Link from "next/link";
 import { dateFormat } from "@/lib/date";
-import { Calendar, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 
 export const LiveSection = ({
   list,
