@@ -66,11 +66,11 @@ export async function generateMetadata({ params }: Props) {
 }
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 export default async function ScheduleDetail({ params }: Props) {
-  const { id } = await params;
+  const { id } = params;
   const [bandData, detail, { contents }] = await Promise.all([
     getBandData(),
     getLiveDetail(id),
