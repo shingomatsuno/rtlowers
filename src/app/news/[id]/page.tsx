@@ -1,7 +1,19 @@
 import { LatestNews } from "@/components/LatestNews";
 import { SafeHTML } from "@/components/SafeHtml";
-import { getAnnounceDetail } from "@/lib/client";
+import { getAnnounceDetail, client } from "@/lib/client";
 import { getBandData } from "@/lib/client";
+
+export async function generateStaticParams() {
+  const ids = await client.getAllContentIds({
+    endpoint: "announcements",
+  });
+
+  return ids.map((id) => ({
+    id,
+  }));
+}
+
+export const revalidate = 60;
 
 interface Props {
   params: Promise<{ id: string }>;

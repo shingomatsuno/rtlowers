@@ -1,9 +1,21 @@
 import { ContactForm } from "@/components/ContactForm";
 import { LiveArchive } from "@/components/LiveArchive";
 import { SafeHTML } from "@/components/SafeHtml";
-import { getFutureLives, getLiveDetail } from "@/lib/client";
+import { getFutureLives, getLiveDetail, client } from "@/lib/client";
 import { getBandData } from "@/lib/client";
+
+export async function generateStaticParams() {
+  const ids = await client.getAllContentIds({
+    endpoint: "lives",
+  });
+
+  return ids.map((id) => ({
+    id,
+  }));
+}
+
 import { dateFormat, isValidUtcDate } from "@/lib/date";
+export const revalidate = 60;
 
 export async function generateMetadata({ params }: Props) {
   const bandData = await getBandData();

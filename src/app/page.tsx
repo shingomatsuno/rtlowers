@@ -10,6 +10,7 @@ import { LiveSection } from "@/components/LiveSection";
 import { FeaturedLive } from "@/components/FeaturedLive";
 import YoutubeEmbed from "@/components/YoutubeEmbed";
 import { ContactForm } from "@/components/ContactForm";
+export const revalidate = 60;
 
 export async function generateMetadata() {
   const bandData = await getBandData();

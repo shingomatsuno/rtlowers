@@ -2,6 +2,7 @@ import { NewsSection } from "@/components/NewsSection";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { client } from "@/lib/client";
 import { Announce } from "@/types/type";
+export const revalidate = 60;
 
 export const metadata = {
   title: "NEWS | Rt.Lowers",

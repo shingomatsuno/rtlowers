@@ -1,3 +1,0 @@
-# wrangler.toml
-compatibility_date = "2025-11-22"
-compatibility_flags = ["nodejs_compat"]
