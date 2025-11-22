@@ -14,7 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
 
   // 固定ページ
-  const staticPages = ["/news", "/live", "/"].map((path) => ({
+  const staticPages = ["", "/news", "/live"].map((path) => ({
     url: `${siteUrl}${path}`,
   }));
 
