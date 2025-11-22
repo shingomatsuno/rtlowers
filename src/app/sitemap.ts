@@ -7,11 +7,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [newsList, schedules] = await Promise.all([
     client.getAllContentIds({
       endpoint: "announcements",
-      filters: "category[not_equals]live-event",
     }),
     client.getAllContentIds({
-      endpoint: "announcements",
-      filters: "category[equals]live-event",
+      endpoint: "lives",
     }),
   ]);
 
