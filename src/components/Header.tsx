@@ -33,7 +33,7 @@ export function Header({ title }: { title: string }) {
             setActive(id);
           }
         },
-        { threshold: 0.5 } // 半分見えたらアクティブに
+        { rootMargin: "-50% 0px -50% 0px" } // 画面中央に来たらアクティブ
       );
 
       observer.observe(el);
