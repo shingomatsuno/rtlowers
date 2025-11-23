@@ -15,8 +15,6 @@ export const revalidate = 60;
 export async function generateMetadata() {
   const bandData = await getBandData();
 
-  console.log(bandData);
-
   const name = bandData.title;
   const description = bandData.description;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com";
