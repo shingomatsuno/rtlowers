@@ -48,6 +48,7 @@ export interface BandData {
   movies: MovieData[];
   sns: SnsData;
   keywords?: string;
+  metaTitle?: string;
 }
 
 export interface Eyecatch {

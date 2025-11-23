@@ -15,10 +15,12 @@ export const revalidate = 60;
 export async function generateMetadata() {
   const bandData = await getBandData();
 
+  console.log(bandData);
+
   const name = bandData.title;
   const description = bandData.description;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com";
-  const title = `${name}`;
+  const title = `${bandData.metaTitle || name}`;
   const sns = bandData.sns;
 
   return {
@@ -278,7 +280,7 @@ export default async function HomePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "MusicGroup",
-            name: bandData.title,
+            name: bandData.metaTitle || bandData.title,
             description: bandData.description,
             url: process.env.NEXT_PUBLIC_SITE_URL,
             image: bandData.heroImages.map((img) => img.url),

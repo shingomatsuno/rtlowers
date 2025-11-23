@@ -12,6 +12,7 @@ export async function getBandData() {
     Pick<
       BandData,
       | "title"
+      | "metaTitle"
       | "description"
       | "sns"
       | "heroImages"
@@ -22,7 +23,8 @@ export async function getBandData() {
   >({
     endpoint: "overview",
     queries: {
-      fields: "title,description,sns,heroImages,heroImagesSp,keywords,icon",
+      fields:
+        "title,metaTitle,description,sns,heroImages,heroImagesSp,keywords,icon",
     },
   });
 }

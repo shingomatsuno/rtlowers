@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props) {
   const description = bandData.description;
   const siteUrl =
     (process.env.NEXT_PUBLIC_SITE_URL || "https://example.com") + `/news/${id}`;
-  const title = `${detail.title} | ${name}`;
+  const title = `${detail.title} | ${bandData.metaTitle || name}`;
   const sns = bandData.sns;
 
   const image = detail.eyecatch?.url
@@ -71,6 +71,7 @@ import { notFound } from "next/navigation";
 
 export default async function NewsDetail({ params }: Props) {
   const { id } = await params;
+  const bandData = await getBandData();
   let detail;
   try {
     detail = await getAnnounceDetail(id);
@@ -110,7 +111,7 @@ export default async function NewsDetail({ params }: Props) {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "NewsArticle",
-            headline: detail.title,
+            headline: `${detail.title} | ${bandData.metaTitle || name}`,
             image: [detail.eyecatch?.url].filter(Boolean),
             datePublished: detail.publishedAt,
             dateModified: detail.updatedAt,

@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props) {
 
   const siteUrl =
     (process.env.NEXT_PUBLIC_SITE_URL || "https://example.com") + `/live/${id}`;
-  const title = `${detail.title} | ${name}`;
+  const title = `${detail.title} | ${bandData.metaTitle || name}`;
   const sns = bandData.sns;
 
   return {
@@ -218,7 +218,7 @@ export default async function ScheduleDetail({ params }: Props) {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "MusicEvent",
-            name: detail.title,
+            name: `${detail.title} | ${bandData.metaTitle || bandData.title}`,
             startDate: detail.eventDetail.eventDate,
             eventStatus: "https://schema.org/EventScheduled",
             eventAttendanceMode:
