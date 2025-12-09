@@ -1,5 +1,5 @@
 import { Announce, BandData, Live } from "@/types/type";
-import { createClient } from "microcms-js-sdk";
+import { createClient, MicroCMSQueries } from "microcms-js-sdk";
 import { toZonedTime } from "date-fns-tz";
 
 export const client = createClient({
@@ -29,13 +29,14 @@ export async function getBandData() {
   });
 }
 
-export async function getLiveDetail(id: string) {
+export async function getLiveDetail(id: string, queries?: MicroCMSQueries) {
   return await client.getListDetail<
     Pick<Live, "id" | "title" | "content" | "eyecatch" | "eventDetail">
   >({
     endpoint: "lives",
     contentId: id,
     queries: {
+      ...queries,
       fields: "id,title,content,eyecatch,eventDetail",
     },
   });
