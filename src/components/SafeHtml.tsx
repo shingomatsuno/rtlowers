@@ -17,7 +17,18 @@ export function SafeHTML({ html }: { html: string }) {
       "u",
     ]),
     allowedAttributes: {
-      "*": ["class", "id", "style"],
+      "*": [
+        "class",
+        "id",
+        "style",
+        "href",
+        "target",
+        "rel",
+        "src",
+        "alt",
+        "width",
+        "height",
+      ],
     },
     allowedSchemes: ["http", "https", "mailto"],
   });
