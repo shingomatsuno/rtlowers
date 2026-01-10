@@ -3,6 +3,7 @@ import { LiveArchive } from "@/components/LiveArchive";
 import { SafeHTML } from "@/components/SafeHtml";
 import { getFutureLives, getLiveDetail, client } from "@/lib/client";
 import { getBandData } from "@/lib/client";
+import { draftMode } from "next/headers";
 
 export async function generateStaticParams() {
   const ids = await client.getAllContentIds({
@@ -68,17 +69,22 @@ export async function generateMetadata({ params }: Props) {
 
 interface Props {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 import { notFound } from "next/navigation";
 
-export default async function ScheduleDetail({ params }: Props) {
+export default async function ScheduleDetail({ params, searchParams }: Props) {
   const { id } = await params;
+  const { draftKey } = await searchParams;
+  const { isEnabled } = await draftMode();
+  const isDraft = isEnabled && !!draftKey;
+
   let bandData, detail, contents;
   try {
     [bandData, detail, { contents }] = await Promise.all([
       getBandData(),
-      getLiveDetail(id),
+      getLiveDetail(id, isDraft ? { draftKey: draftKey as string } : undefined),
       getFutureLives(),
     ]);
   } catch {
